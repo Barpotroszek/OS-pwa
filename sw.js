@@ -1,7 +1,7 @@
 const version = "1.0.2",
   files = [
     "/",
-    "/index.html",
+    "index.html",
     "manifest.json",
     "https://fonts.googleapis.com/css?family=Ubuntu+Condensed|Ubuntu:300,300i,400,500&display=swap",
   ],
