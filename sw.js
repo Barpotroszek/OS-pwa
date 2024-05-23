@@ -28,7 +28,7 @@ function cacheFirst(req) {
   return caches.match(req).then((r) => {
     if (r) {
       console.log("[SW] Matched", r);
-      saveCache(r.clone());
+      saveCache(req, r.clone());
       return r;
     }
     console.log("[SW] not matched, downloading", req.url);
