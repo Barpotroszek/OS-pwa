@@ -1,8 +1,8 @@
-const version = "1.0.2",
+const version = "1.0.3",
   files = [
-    "/",
     "index.html",
     "manifest.json",
+    "json/data-3.json",
     "https://fonts.googleapis.com/css?family=Ubuntu+Condensed|Ubuntu:300,300i,400,500&display=swap",
   ],
   CACHE_NAME = "os-app",
@@ -20,16 +20,16 @@ self.addEventListener("install", (event) => {
 function saveCache(req, res) {
   return caches.open(CACHE_NAME).then((cache) => {
     console.log("[SW oper] saving to cache", res);
-    cache.put(req, res);
+    cache.put(req, res).catch(console.error);
   });
 }
 
 function cacheFirst(req) {
-  return caches.match(req).then((r) => {
-    if (r) {
-      console.log("[SW] Matched", r);
-      saveCache(req, r.clone());
-      return r;
+  return caches.match(req).then((res) => {
+    if (res) {
+      console.log("[SW] Matched", res);
+      saveCache(req, res.clone());
+      return res;
     }
     console.log("[SW] not matched, downloading", req.url);
     return fetch(req).then((resp) => {
@@ -37,45 +37,48 @@ function cacheFirst(req) {
         console.log("[SW] Problem to fetch from web");
         return resp;
       }
+      if (req.url.contains("hot-update")) return resp;
       return saveCache(req, resp);
     });
   });
 }
 
 function fetchFirst(req) {
-  return fetch(req).then((resp) => {
-    if (resp && resp.status == 200) {
-      console.log("[SW] Fetch from web");
-      saveCache(req, resp.clone());
-      return resp;
-    }
-    }).catch(error=>{
-    console.log("Not fetching...")
-    return caches.match(req).then((r) => {
+  return fetch(req)
+    .then((resp) => {
+      if (resp && resp.status == 200) {
+        console.log("[SW] Fetch from web");
+        saveCache(req, resp.clone());
+        return resp;
+      }
+    })
+    .catch((error) => {
+      console.log("Not fetching...");
+      return caches.match(req).then((r) => {
         console.log("From CACHE");
         if (r) return r;
         else {
           alert("Bez połączenia dużo nie zrobimy...");
         }
+      });
     });
-  });
 }
 
-const offlineMode = (event)=> {
+const offlineMode = (event) => {
   return caches.match(event.req).then((r) => {
     console.log("From CACHE");
     if (r) return r;
     else {
       alert("Bez połączenia dużo nie zrobimy...");
     }
-});
-}
+  });
+};
 
 const fetchWrapper = (event) => {
   const req = event.request;
   console.log("[SW] event.request:", req.url);
   event.respondWith(cacheFirst(event.request));
-}
+};
 
 self.addEventListener("fetch", fetchWrapper);
 

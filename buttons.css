@@ -1,0 +1,18 @@
+button {
+    display: block;
+    padding: .6em;
+    font-size: 1rem;
+    background-color: var(--primary-color);
+    border: var(--secondary-color);
+    border-radius: .2em;
+    color: var(--light-font-color);
+    font-weight: bold;
+}
+
+button:active, button:hover {
+    filter: brightness(0.9);
+}
+
+.pos-right{
+    float: right
+}
