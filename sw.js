@@ -40,9 +40,9 @@ function cacheFirst(req) {
       try {
         if (req.url.contains("hot-update")) return resp;
       } catch (error) {
-        return resp;
       }
-      return saveCache(req, resp);
+        saveCache(req, resp.clone());
+        return resp;
     });
   });
 }
@@ -90,14 +90,3 @@ self.addEventListener("activate", (event) => {
   console.log("[SW] Active!!!", event);
   self.clients.claim();
 });
-
-// self.addEventListener("message", (ev)=>{
-//   if(ev.data.offlineMode){
-//     self.removeEventListener("fetch", fetchWrapper, true)
-//     self.addEventListener("fetch", offlineMode)
-//   }
-//   else{
-//     self.removeEventListener("fetch", offlineMode, true)
-//     self.addEventListener("fetch", fetchWrapper)
-//   }
-// })
