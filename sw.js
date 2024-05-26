@@ -37,7 +37,11 @@ function cacheFirst(req) {
         console.log("[SW] Problem to fetch from web");
         return resp;
       }
-      if (req.url.contains("hot-update")) return resp;
+      try {
+        if (req.url.contains("hot-update")) return resp;
+      } catch (error) {
+        return resp;
+      }
       return saveCache(req, resp);
     });
   });
