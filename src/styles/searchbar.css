@@ -1,0 +1,39 @@
+#searchbar{
+    display: grid;
+    grid-template-columns: 1fr auto;
+    margin: 1em 0;
+    gap: .5em
+}
+
+#searchbar > input{
+    border: none;
+    border-bottom: 1px solid gray;
+    font-size: 1em;
+    background: none;
+    color: inherit;
+    padding-left: .5em;
+}
+
+
+#searchbar > button:hover {
+    /* border: inherit; */
+    background-color: var(--primary-color);
+    color: white;
+    padding: .3em;
+    transition: .2s all;
+}
+
+
+#searchbar > button {
+    border: 1px solid var(--primary-color);
+    background: none;
+    color: var(--primary-color);
+    padding: .3em;
+}
+input:focus{
+    outline: none;
+}
+
+input:focus + #searchbar {
+    border-bottom: var(--primary-color);
+}

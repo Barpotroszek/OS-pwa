@@ -1,0 +1,25 @@
+#songDisplayer > section {
+    margin: 1em auto;
+    width: fit-content;
+    text-indent: .2em;
+}
+
+@media (orientation: landscape) {
+    #songDisplayer > section {
+        font-size: 1.1em;
+    }
+}
+
+@media (orientation: portrait) {
+    #songDisplayer > section {
+        text-indent: 0;
+        font-size: 1.1em;
+    }
+}
+
+em {
+    font-weight: bolder;
+}
+#songDisplayer > section * {
+    margin: .5em 0;
+}

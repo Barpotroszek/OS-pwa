@@ -1,0 +1,47 @@
+#titlesList {
+    list-style-type: none;
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    overflow-x:hidden;
+    overflow-y: scroll;
+    max-height: 80vh !important;
+    
+    background-color: var(--main-content-box-color);
+    border-spacing: 0;
+}
+
+#titlesList tr{
+    color: var(--tr-font-color);
+    font-weight:  500;
+    width: 100%;
+    height: max-content;
+    padding: .4em .3em;
+    display: block;
+    cursor: pointer;
+    box-sizing: border-box;
+    border-bottom: .01em solid #80808081;
+    /* margin: .1em 0; */
+    transition: .1s ease-in-out;
+}
+
+tr:nth-child(even){
+    background-color: var(--table-odd-background-color);
+}
+
+
+html[data-theme="light"] tr:nth-child(even){
+    background-color: #f9f9f9;
+}
+html[data-theme="dark"] tr:nth-child(even){
+    background-color: #363636;
+}
+
+
+#titlesList tr:hover {
+    transform: scale(1.05) translate(1em);
+}
+
+#titlesList  tr.active {
+    transform: scale(0.98);
+}

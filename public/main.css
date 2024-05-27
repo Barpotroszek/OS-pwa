@@ -1,0 +1,140 @@
+:root {
+  --light-font-color: #fafafa;
+  --light-background: #fafafa;
+  --dark-font-color: #444444;
+  --dark-background: #1e1e1e;
+  --primary-color: #bf272f;
+  --secondary-color: #aa232a;
+  --main-content-box-color: #ffffff;
+  --font-size: 4.5em;
+  --dark-main-content-box-color: #292828;
+  --dark-table-odd-background: #363636;
+  --light-main-content-box-color: #ffffff;
+  --light-table-odd-background: #f9f9f9;
+}
+
+.dark-theme {
+  --background-color: #233b3b;
+  --font-color: #fff;
+}
+
+@media (prefers-color-scheme: light) {
+  html {
+    --main-font-color: var(--dark-font-color);
+    --main-background-color: var(--light-background);
+    --main-content-box-color: var(--light-main-content-box-color);
+    --table-odd-background: var(--light-table-odd-background);
+    --tr-font-color: var(--primary-color);
+}
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    --main-font-color: var(--light-font-color);
+    --main-background-color: var(--dark-background);
+    --main-content-box-color: var(--dark-main-content-box-color);
+    --table-odd-background: var(--dark-table-odd-background);
+    --tr-font-color: #ff2f3a;  /* To make it more visible */
+}
+}
+
+html[data-theme="light"] {
+  --main-font-color: var(--dark-font-color) !important;
+  --main-background-color: var(--light-background) !important;
+  --main-content-box-color: var(--light-main-content-box-color) !important;
+  --table-odd-background: var(--light-table-odd-background) !important;
+  --tr-font-color: var(--primary-color);
+}
+
+html[data-theme="dark"] {
+  --main-font-color: var(--light-font-color) !important;
+  --main-background-color: var(--dark-background) !important;
+  --main-content-box-color: var(--dark-main-content-box-color) !important;
+  --table-odd-background: var(--dark-table-odd-background) !important;
+  --tr-font-color: #ff2f3a;  /* lighter than primary -> to make it more visible */
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: black;
+}
+
+
+html,
+body,
+#root,
+*[data-theme] {
+  background-color: var(--main-background-color) !important;
+  color: var(--main-font-color) !important;
+}
+
+
+header {
+  border: 0;
+  border-bottom: 1px solid var(--secondary-color);
+  color: white;
+  margin-bottom: 0;
+  border-radius: 0;
+  min-height: 2.5em;
+  padding: .2em .5em;
+  box-sizing: border-box;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.30);
+  background-color: var(--primary-color);
+}
+
+
+.flex-center {
+  padding: 1.5rem;
+  display: flex !important;
+  justify-content: center;
+}
+
+body {
+  background-color: var(--main-background-color);
+}
+
+main {
+  background-color: var(--main-content-box-color);
+  color: var(--main-font-color) !important;
+  padding: 1.5em;
+  font-size: 1em;
+  position: relative !important;
+  height: max-content;
+  margin: 0;
+  box-shadow: 1px 1px 5px #979797;
+  width: 100%;
+  word-wrap: normal;
+}
+
+main>h2 {
+  border-bottom: 1px solid var(--primary-color);
+  /* color: var(--primary-color); */
+  padding-bottom: .5em;
+  margin-bottom: .2em;
+}
+
+@media (min-width: 63rem) {
+  main {
+    width: 60rem;
+  }
+
+}
+
+h2 {
+  margin: 0
+}
+
+ul,
+ol {
+  margin: .5em 0;
+  padding-left: 1.3em;
+}
+
+.hiddenKids>* {
+  opacity: 0;
+}
