@@ -7,15 +7,36 @@ export const relativeUrl = (target: string) => {
 };
 
 const registerSW = (path: string) => {
+  console.log("[SW] Regitsration")
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register(relativeUrl(path)).then(function (registration) {
-      console.debug("Service Worker Registered", registration);
+      console.debug("[SW] Service Worker Registered", registration);
+      
+      registration.onupdatefound = () => {
+        // Check & notify if app needs to be update
+        console.log("[SW] UPDATE: ", registration);
+        const installer = registration.installing;
+        if (installer)
+          installer.onstatechange = () => {
+            if (installer.state === "installed") {
+              sendConfirmation(registration)
+            }
+          }
+      }
     })
       .catch(function (err) {
         console.debug("Service Worker Failed to Register", err);
       });
   }
   else console.debug("SW not supported")
+}
+
+const sendConfirmation = (reg: ServiceWorkerRegistration) => {
+  // ask user if he want to update app
+  // eslint-disable-next-line no-restricted-globals
+  if (confirm("Dostępna jest akualizacja. Czy chcesz ją zainstalowac?")) {
+    reg.update()
+  }
 }
 
 const setupDarkModeListener = () => {
@@ -36,6 +57,12 @@ export default function init() {
   setupDarkModeListener()
   registerSW("sw.js");
 
+  // inform SW if PWA is installed
+  navigator.serviceWorker.oncontrollerchange = function () {
+    if (navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller!.postMessage({ caching: window.matchMedia("(display-mode: standalone)").matches })
+    }
+  }
   let theme = window.localStorage.getItem("theme"), mode;
   if (!theme)
     mode = window.matchMedia("(prefers-color-scheme: dark )").matches;
@@ -44,9 +71,9 @@ export default function init() {
   window.postMessage({ darkMode: mode });
 }
 
-  // window.addEventListener("popstate", e => {
-  //   alert("PopSTate")
-  //   const newUrl = (window.location),
-  //     trimmed = window.homepage.replace(/\/$/, '');
-  //   console.log(newUrl.href, newUrl.href.includes(trimmed))
-  // })
+// window.addEventListener("popstate", e => {
+//   alert("PopSTate")
+//   const newUrl = (window.location),
+//     trimmed = window.homepage.replace(/\/$/, '');
+//   console.log(newUrl.href, newUrl.href.includes(trimmed))
+// })
