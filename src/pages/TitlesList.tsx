@@ -36,7 +36,7 @@ export default function TitlesList({ chosenSongCb }: { chosenSongCb: any }) {
       updateInput(q);
     } else {
       db.getOnlyTitles().then((v) => {
-        console.log("[TitilesList] EFFECT");
+        // console.log("[TitilesList] EFFECT");
         setList(v);
       });
     }
