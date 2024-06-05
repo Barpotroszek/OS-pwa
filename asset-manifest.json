@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/OS-pwa/static/css/main.d7b39231.css",
-    "main.js": "/OS-pwa/static/js/main.85b16b9f.js",
+    "main.js": "/OS-pwa/static/js/main.60a6c33b.js",
     "service-worker.js": "/OS-pwa/service-worker.js",
     "static/media/logo_mobile.png": "/OS-pwa/static/media/logo_mobile.33642c7d72cd4fee5833.png",
     "index.html": "/OS-pwa/index.html",
     "main.d7b39231.css.map": "/OS-pwa/static/css/main.d7b39231.css.map",
-    "main.85b16b9f.js.map": "/OS-pwa/static/js/main.85b16b9f.js.map"
+    "main.60a6c33b.js.map": "/OS-pwa/static/js/main.60a6c33b.js.map"
   },
   "entrypoints": [
     "static/css/main.d7b39231.css",
-    "static/js/main.85b16b9f.js"
+    "static/js/main.60a6c33b.js"
   ]
 }
