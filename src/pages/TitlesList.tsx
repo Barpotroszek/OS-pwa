@@ -10,9 +10,13 @@ export default function TitlesList({ chosenSongCb }: { chosenSongCb: any }) {
   const db = Database.getInstance(),
     [list, setList] = useState<TitlesListElem[]>([]),
     [enteredInput, updateInput] = useState(""),
+
+    // działanie wyszukiwarki
     searchInputAction = (e: any) => {
       updateInput(e.target.value);
     },
+
+    // przycisk wyszukiwarki
     searchButtonAction = (e?: any) => {
       console.log({ enteredInput });
       const url = new URL(window.location.href);
@@ -22,12 +26,15 @@ export default function TitlesList({ chosenSongCb }: { chosenSongCb: any }) {
       pushState(url.href);
       db.search(enteredInput).then(setList);
     },
+
+    // przycisk "Powrót"
     backCallback = () => {
       console.log("backCallback")
       db.getOnlyTitles().then(e=>{console.log("tt"); setList(e)});
       updateInput('');
     };
 
+  // pobieranie linku by sprawdzić czy nie ma specjalnych życzeń 
   useEffect(() => {
     const q = new URL(window.location.href).searchParams.get("q");
     if (q && q !== "") {

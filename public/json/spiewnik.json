@@ -1,8 +1,4 @@
 [
-{"type":"header","version":"5.1.0","comment":"Export to JSON plugin for PHPMyAdmin"},
-{"type":"database","title":"otworzcieserca"},
-{"type":"table","title":"spiewnik","database":"otworzcieserca","data":
-[
 {"id":1,"title":"Otwórzcie serca","href":"http:\/\/otworzcieserca.pl\/cala-zawartosc\/4-0001-otworzcie-serca","liturgia":"1026","okazje":"0","status":"0","recording":"https:\/\/www.youtube.com\/watch?v=u6hu7nkLfLM&ab_channel=Diakoniamuzycznadiecezjiwarszawsko-praskiej","custom":"0","suggestions":"1","to_check":"0"},
 {"id":2,"title":"Aaa, Alleluja! W Tobie cała nadzieja ma","href":"http:\/\/otworzcieserca.pl\/cala-zawartosc\/5-0002-aaa-alleluja-w-tobie-cala-nadzieja-ma","liturgia":"0","okazje":"256","status":"0","recording":"https:\/\/youtu.be\/QdH71nmbQ8Y","custom":"0","suggestions":"0","to_check":"0"},
 {"id":3,"title":"Abba, Ojcze, jesteś Garncarzem","href":"http:\/\/otworzcieserca.pl\/cala-zawartosc\/6-0003-abba-ojcze-jestes-garncarzem","liturgia":"0","okazje":"384","status":"0","recording":"https:\/\/youtu.be\/hX5vZT7XeA8","custom":"0","suggestions":"0","to_check":"0"},
@@ -1298,6 +1294,4 @@
 {"id":1293,"title":"Poruszaj się Duchu Święty w nas","href":"https:\/\/tuneguitar.net\/chwyty\/piosenki-religijne\/poruszaj-sie-duchu-swiety-w-nas","liturgia":"0","okazje":"64","status":"2","recording":"https:\/\/youtu.be\/EF9Louo48I4","custom":"1","suggestions":"0","to_check":"0"},
 {"id":1294,"title":"Ty obecny wśród nas","href":"https:\/\/mocniwduchu.jezuici.pl\/mocniutwory\/ty-obecny-wsrod-nas\/93","liturgia":"0","okazje":"256","status":"2","recording":"https:\/\/youtu.be\/xyVjzoxMbKE","custom":"1","suggestions":"0","to_check":"0"},
 {"id":1295,"title":"Oto ja dokonuję rzeczy nowej","href":null,"liturgia":"0","okazje":"32","status":"10","recording":"https:\/\/soundcloud.com\/ocdcmuzyka\/oto-ja-dokonuj-rzeczy-nowej","custom":"1","suggestions":"0","to_check":"0"}
-]
-}
 ]

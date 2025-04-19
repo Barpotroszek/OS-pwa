@@ -87,11 +87,13 @@ export default class Database {
    */
   private parseItems<T>(data: Array<Object>): T[] {
     const items: T[] = [];
+
     data.forEach((item) => {
       //@ts-ignore
       item["id"] = Number(item["id"]);
       items.push(item as T);
-    });
+    })
+
     return items;
   }
 
@@ -132,6 +134,8 @@ export default class Database {
 
     transaction.onerror = console.error;
     const store = transaction.objectStore("songs");
+    console.debug("STORE:", {data, store})
+
     data.forEach((item) => {
       store.put(item);
     });
@@ -148,10 +152,15 @@ export default class Database {
    *
    */
   private async uploadLatestData(callback?: any) {
+    try {
     const data = await this.getData();
-    // console.log("Data:", data)
-    const items: Item[] = this.parseItems(Object(data));
-    this.fillData(items, callback);
+
+    console.log("Data:", data)
+    const items: Item[] = this.parseItems(Object(data)); 
+    this.fillData(items, callback); 
+    } catch (e) {
+      
+    }
   }
 
   /**
@@ -227,6 +236,8 @@ export default class Database {
 
       const store = transaction.objectStore(this.DBname);
       const req = store.getAll();
+    console.log("[REQ_getAll] ", req)
+
       req.onsuccess = () => {
         res(req.result as Item[])
       };

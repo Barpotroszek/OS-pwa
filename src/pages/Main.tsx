@@ -8,6 +8,7 @@ import { pushState } from "../functions/helpers";
 
 export default function Main() {
   const [chosenSong, changeChosenSong] = useState<any>(),
+  // TODO: Sprawdzić co ustawia jako "chosenSong" i w DB zrobić dobry request
     proxyChosenSong = (id: number, fromUrl?: boolean) => {
       // add history mark if it was userAction
       if (!fromUrl) {

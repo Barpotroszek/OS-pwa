@@ -5,8 +5,9 @@ export default class Reader {
   filePath: string;
   data: any;
   resp: Promise<string>;
-  constructor() {
-    this.filePath = window.homepage + "json/data-3.json";
+  constructor(url?: String | Number = null) {
+    console.log("Reader:", {url})
+    this.filePath = window.homepage + (url == null ? "json/spiewnik.json":"store/" + url+'.md');
     
     // to make this .. url work as should, as relative :')
     console.log("FILEPATH:",{ filePath: this.filePath });
@@ -48,6 +49,21 @@ export default class Reader {
           res(JSON.parse(text));
         } catch (error) {
           console.error(error);
+        }
+      });
+    });
+  }
+
+  getSong(): Promise<string>{
+    return new Promise((res) => {
+      this.resp.then((text) => {
+        console.log({ text });
+        // debugger;
+        try {
+          res(text);
+        } catch (error) {
+          console.error(error);
+          rej('')
         }
       });
     });

@@ -1,4 +1,5 @@
 export default function HTMLconverter(txt) {
+  console.log({txt})
   txt = txt
     .replaceAll("[em]", "<em>")
     .replaceAll("[/em]", "</em>")

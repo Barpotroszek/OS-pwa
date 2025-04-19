@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { DbItem, TitlesListElem } from "./interfaces";
 //@ts-ignore
 import HTMLconverter from "./htmlConverter.js";
 import { BackButton } from "./button";
+import Reader from "./fileReader";
 
 /**
  * Przygotowuje element na podstawie przekazanego elementu
@@ -29,20 +30,21 @@ export function TitlesListItemFabric({
 }
 
 export function SongItemFabric({item,cb}: {item: DbItem,cb:any}) {
-  let temp = item.lyrics;
-  temp = HTMLconverter(temp);
-  console.log("2 FABRICAAA")
-
-  const lyrics = React.createElement("section", {
-    dangerouslySetInnerHTML: { __html: temp },
-  });
-
+  const [lyrics, updateLyrics] = useState('');
+  new Reader(item.id).getSong().then(txt =>{
+    txt = HTMLconverter(txt);
+    updateLyrics(txt);
+  })
+  const Lyrics = React.createElement('section', {
+    dangerouslySetInnerHTML: {__html: lyrics}
+  })
   return (
     <main id="songDisplayer">
       <h2>
         {item.id}. {item.title}
       </h2>
-      {lyrics} <BackButton cb={cb}/>
+      {Lyrics}
+       <BackButton cb={cb}/>
     </main>
   );
 }

@@ -19,7 +19,7 @@ const registerSW = (path: string) => {
         if (installer)
           installer.onstatechange = () => {
             if (installer.state === "installed") {
-              sendConfirmation(registration)
+              // sendConfirmation(registration)
             }
           }
       }
@@ -52,17 +52,21 @@ const setupDarkModeListener = () => {
   });
 }
 
+const notifySW = ()=>{
+    navigator.serviceWorker.controller!.postMessage({ caching: window.matchMedia("(display-mode: standalone)").matches })
+}
+
 export default function init() {
   window.homepage = "/OS-pwa/";
   setupDarkModeListener()
   registerSW("sw.js");
 
   // inform SW if PWA is installed
-  navigator.serviceWorker.oncontrollerchange = function () {
-    if (navigator.serviceWorker.controller) {
-      navigator.serviceWorker.controller!.postMessage({ caching: window.matchMedia("(display-mode: standalone)").matches })
-    }
-  }
+  if(navigator.serviceWorker.controller !== null)
+    notifySW()
+  else
+    navigator.serviceWorker.oncontrollerchange = notifySW;
+
   let theme = window.localStorage.getItem("theme"), mode;
   if (!theme)
     mode = window.matchMedia("(prefers-color-scheme: dark )").matches;
