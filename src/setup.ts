@@ -59,13 +59,7 @@ const notifySW = ()=>{
 export default function init() {
   window.homepage = "/OS-pwa/";
   setupDarkModeListener()
-  registerSW("sw.js");
-
-  // inform SW if PWA is installed
-  if(navigator.serviceWorker.controller !== null)
-    notifySW()
-  else
-    navigator.serviceWorker.oncontrollerchange = notifySW;
+  // registerSW("sw.js");
 
   let theme = window.localStorage.getItem("theme"), mode;
   if (!theme)
@@ -73,6 +67,14 @@ export default function init() {
   else
     mode = theme === "dark";
   window.postMessage({ darkMode: mode });
+
+  return;  
+  // inform SW if PWA is installed
+  if(navigator.serviceWorker.controller !== null)
+    notifySW()
+  else
+    navigator.serviceWorker.oncontrollerchange = notifySW;
+
 }
 
 // window.addEventListener("popstate", e => {
