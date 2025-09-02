@@ -1,0 +1,22 @@
+import re as rgx
+files = open("files.txt", 'r').readlines()
+
+for f in files:
+    f=f.replace('\n', '')
+    print("Rewriting " + f)
+    with open(f, encoding='utf-8', mode='r') as file:
+        content = file.read()
+        content = content.replace("[ol]", "").replace("[/ol]", "").replace('[br/]', "\n")
+        content = content.replace("[em]", "{", -1).replace("[/em]", "}", -1).replace("[/li]", "\n", -1)
+        content = content.replace("[p]", "").replace("[/p]", "\n")
+
+        counter = 0
+        while content.find("[li]") > -1:
+            counter += 1
+            content = content.replace("[li]", str(counter)+ ". ", 1)
+            
+
+        content = rgx.sub("\n$", "", content)
+        open("plain/" + f, 'w+', encoding='utf-8').write(content)
+
+print("Finished :>")

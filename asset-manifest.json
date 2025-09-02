@@ -1,15 +1,13 @@
 {
   "files": {
-    "main.css": "/OS-pwa/static/css/main.d7b39231.css",
-    "main.js": "/OS-pwa/static/js/main.4421b59a.js",
-    "service-worker.js": "/OS-pwa/service-worker.js",
-    "static/media/logo_mobile.png": "/OS-pwa/static/media/logo_mobile.33642c7d72cd4fee5833.png",
+    "main.css": "/OS-pwa/static/css/main.2736202c.css",
+    "main.js": "/OS-pwa/static/js/main.884fc54b.js",
     "index.html": "/OS-pwa/index.html",
-    "main.d7b39231.css.map": "/OS-pwa/static/css/main.d7b39231.css.map",
-    "main.4421b59a.js.map": "/OS-pwa/static/js/main.4421b59a.js.map"
+    "main.2736202c.css.map": "/OS-pwa/static/css/main.2736202c.css.map",
+    "main.884fc54b.js.map": "/OS-pwa/static/js/main.884fc54b.js.map"
   },
   "entrypoints": [
-    "static/css/main.d7b39231.css",
-    "static/js/main.4421b59a.js"
+    "static/css/main.2736202c.css",
+    "static/js/main.884fc54b.js"
   ]
 }
