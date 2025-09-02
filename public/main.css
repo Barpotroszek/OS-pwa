@@ -3,9 +3,10 @@
   --light-background: #fafafa;
   --dark-font-color: #444444;
   --dark-background: #1e1e1e;
+  
   --primary-color: #bf272f;
   --secondary-color: #aa232a;
-  --main-content-box-color: #ffffff;
+  /* --main-content-box-color: #ffffff; */
   --font-size: 4.5em;
   --dark-main-content-box-color: #292828;
   --dark-table-odd-background: #363636;
@@ -137,4 +138,8 @@ ol {
 
 .hiddenKids>* {
   opacity: 0;
+}
+
+#sideNav.active + #main-container{
+  filter: brightness(.7);
 }

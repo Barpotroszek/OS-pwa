@@ -1,7 +1,3 @@
-declare global {
-  interface Window { homepage: string; }
-}
-
 export const relativeUrl = (target: string) => {
   return window.homepage + target;
 };
@@ -57,7 +53,6 @@ const notifySW = ()=>{
 }
 
 export default function init() {
-  window.homepage = "/OS-pwa/";
   setupDarkModeListener()
   // registerSW("sw.js");
 

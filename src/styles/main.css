@@ -1,0 +1,9 @@
+#main-wrapper {
+    position: relative;
+}
+
+#main-wrapper > *s {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}

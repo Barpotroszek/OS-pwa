@@ -1,0 +1,1 @@
+export const pushState = (s: String) => {}
