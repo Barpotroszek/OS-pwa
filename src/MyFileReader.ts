@@ -6,7 +6,7 @@ export default class MyFileReader {
   resp: Promise<Response>;
 
   public createRequest(url: String | Number = null): Promise<Response>{
-    console.debug("[MyFileReader] Createing request\nReader:", {url})
+    // console.debug("[MyFileReader] Createing request\nReader:", {url})
     
     const path = new URL(window.location.href)
     path.pathname = path.pathname.replace(/\/$/,'')

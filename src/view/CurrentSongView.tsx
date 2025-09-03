@@ -10,8 +10,8 @@ export default function CurrentSongView({repo}: {repo: CurrentSong}){
     useEffect(()=>{
         repo.getLyrics().then(v => {
             let t = HTMLConverter(v);
-            console.log("Było:", v)
-            console.log("Jest:", t)
+            // console.log("Było:", v)
+            // console.log("Jest:", t)
             return t
         }).then(updateLyrics);
     }, [])
@@ -20,7 +20,7 @@ export default function CurrentSongView({repo}: {repo: CurrentSong}){
         dangerouslySetInnerHTML: {__html: lyrics}
       })
 
-    console.log(HTMLConverter)
+    // console.log(HTMLConverter)
     return(
         <>
             <h2>

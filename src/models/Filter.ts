@@ -6,7 +6,7 @@ export default class Filter {
     private tags: number = 0;
 
     constructor(){
-        console.log("Stworzono nowy Filter;\n", this.rgx)
+        // console.log("Stworzono nowy Filter;\n", this.rgx)
     }
 
     /**
