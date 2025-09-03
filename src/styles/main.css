@@ -1,5 +1,7 @@
 #main-wrapper {
     position: relative;
+    height: 94vh;
+    box-sizing: border-box;
 }
 
 #main-wrapper > *s {

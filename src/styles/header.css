@@ -3,7 +3,7 @@ header {
     flex-direction: row;
     align-items: center;
     gap: .7em;
-    height: min-content;
+    height: 6vh;
 }
 
 header .menu-button {

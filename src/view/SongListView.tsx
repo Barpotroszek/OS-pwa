@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../styles/titlesList.css";
 import "../styles/searchbar.css";
-import SongBook from "../viewModels/SongBook";
+import SongBook from "../viewModels/SongListVM";
 import Song from "../models/Song";
 import { pushState } from "../helpers";
 

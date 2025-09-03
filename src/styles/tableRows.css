@@ -1,0 +1,27 @@
+
+tr{
+    color: var(--tr-font-color);
+    /* font-weight:  500; */
+    width: 100%;
+    height: max-content;
+    padding: .4em .3em;
+    display: block;
+    cursor: pointer;
+    box-sizing: border-box;
+    /* border-bottom: .01em solid #80808081; */
+    /* margin: .1em 0; */
+    transition: .1s ease-in-out;
+}
+
+tr:nth-child(even){
+    background-color: var(--table-odd-background-color);
+}
+
+
+tr:hover {
+    transform: scale(1.05) translate(1em);
+}
+
+tr.active {
+    transform: scale(0.98);
+}

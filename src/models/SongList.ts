@@ -1,3 +1,4 @@
+import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 import MyFileReader from "../MyFileReader";
 import CurrentSong from "../viewModels/CurrentSong";
 import Filter from "./Filter";
@@ -15,10 +16,10 @@ export default class SongList {
   }
 
   private _fetchList(): Promise<void | Song[]> {
-    return this.reader.readToJSON("storage.json").then(data => {
+    return this.reader.readToJSON("storage-2.json").then(data => {
       // console.log(data)
-      Object.entries(data).forEach(([n, v]) => {
-        this.mainList.push(new Song(Number(n), v as string))
+      Object.entries(data.title).forEach(([n, v]) => { 
+        this.mainList.push(new Song(Number(n), v as string, data.tags[n]))
       })
     })
   }
