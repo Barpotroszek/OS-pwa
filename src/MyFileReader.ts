@@ -1,4 +1,4 @@
-import { STORAGE_DIR, STORAGE_FILE } from "./infrastructure/paths";
+import { STORAGE_DIR, STORAGE_FILE } from "./infrastructure/constants";
 import URLManager from "./infrastructure/URLManager";
 
 export default class MyFileReader {
