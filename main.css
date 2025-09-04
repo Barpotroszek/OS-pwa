@@ -1,6 +1,6 @@
 :root {
   --light-font-color: #fafafa;
-  --light-background: #fafafa;
+  --light-background: #dedbdb;
   --dark-font-color: #444444;
   --dark-background: #1e1e1e;
   
@@ -11,7 +11,7 @@
   --dark-main-content-box-color: #292828;
   --dark-table-odd-background: #363636;
   --light-main-content-box-color: #ffffff;
-  --light-table-odd-background: #f9f9f9;
+  --light-table-odd-background: #dedbdb;
 }
 
 .dark-theme {
@@ -107,9 +107,12 @@ main {
   position: relative !important;
   height: max-content;
   margin: 0;
-  box-shadow: 1px 1px 5px #979797;
+  /* box-shadow: 1px 1px 5px #979797; */
   width: 100%;
   word-wrap: normal;
+
+  /* max-height: 80vh; */
+
 }
 
 main>h2 {
@@ -130,10 +133,23 @@ h2 {
   margin: 0
 }
 
+.text-center{
+  text-align: center;
+}
+
+.max-width {
+  width: 100%;
+  display: block;
+}
+
 ul,
 ol {
   margin: .5em 0;
   padding-left: 1.3em;
+}
+
+em {
+  font-style: italic;
 }
 
 .hiddenKids>* {
