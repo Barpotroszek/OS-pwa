@@ -14,7 +14,6 @@ export default class SongListVM {
     public set onLoadEnd(callback: (() => void)) {
         this._onLoadEnd = callback;
         if (this._uiState === LoadingStates.FINISHED){
-            console.log("Finished before setup !!!")
             callback();
         }
     }
@@ -72,7 +71,7 @@ export default class SongListVM {
         this.repo.fetchList(this.filter).then(list => {
             this.currentList = list;
             this._uiState = LoadingStates.FINISHED;
-            console.log("List has been fetched, running callback:")
+            console.debug("[SongListVM] List has been fetched, running callback:")
             if (this._onLoadEnd)
                 this._onLoadEnd();
         }).catch(e => alert(e))
@@ -84,8 +83,8 @@ export default class SongListVM {
      * @returns Lista piosenek pobrana z repo
      */
     public getList(): Song[] {
-        console.log("Downloading list of songs")
-        console.log(this.currentList)
+        console.debug("[SongListVM] Downloading list of songs")
+        // console.log(this.currentList)
         return this.currentList
     }
 }

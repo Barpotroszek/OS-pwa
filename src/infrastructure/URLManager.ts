@@ -23,7 +23,9 @@ export default class URLManager {
         this.pushState(this.location.href);
     }
 
-    public realtivePath(params: string): string {
-        return ""
+    public static relativePath(url: string): string {
+        let loc = this.location.pathname.replace(/\/$/,'') + url;
+        console.log({loc})
+        return loc
     }
 }
