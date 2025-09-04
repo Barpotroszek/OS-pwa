@@ -18,17 +18,22 @@ function App() {
     songListModel = useRef(new SongListVM(songListRepo)).current,
     currentSongRepo = useRef(new CurrentSong(reader)).current;
 
-  const toggleSideNav = useRef<() => void | undefined>(),
-    wrapper = useRef(null);
-  const [currentSongID, updateCurrentSong] = useState<number | undefined>();
+  const wrapper = useRef(null),
+   [currentSongID, updateCurrentSong] = useState<number | undefined>();
 
-  // URL Parser - żeby sprawdzić czy to aktualna piesn, itp itd
+  // URL Parser - żeby sprawdzić co ma wyświetlić
   useEffect(() => {
+    const searchParams = new URL(window.location.href).searchParams,
+      id = searchParams.get("id"),
+      tag = searchParams.get("tag");
+
+    if (tag != null) songListModel.setTag(Number(tag));
+
     songListRepo.loadingProcess.then(() => {
-      const id = new URL(window.location.href).searchParams.get("id");
-      if (id == null) updateCurrentSong(undefined);
-      updateCurrentSong(Number(id));
+      if (id != null) updateCurrentSong(Number(id));
+      else updateCurrentSong(undefined);
     });
+    songListModel.fetchSongsFromRepo();
   }, []);
 
   const backCallback = () => {
@@ -39,6 +44,9 @@ function App() {
   };
 
   const tagChosenCallback = (tag: number) => {
+    const url = new URL(window.location.href);
+    url.searchParams.append("tag", tag.toString())
+    pushState(url.href);
     songListModel.setTag(tag);
     songListModel.fetchSongsFromRepo();
     // @ts-ignore

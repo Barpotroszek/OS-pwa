@@ -13,7 +13,7 @@ export default class SongListVM {
 
     public set onLoadEnd(callback: (() => void)) {
         this._onLoadEnd = callback;
-        if (this._uiState == LoadingStates.FINISHED){
+        if (this._uiState === LoadingStates.FINISHED){
             console.log("Finished before setup !!!")
             callback();
         }
@@ -29,7 +29,7 @@ export default class SongListVM {
     constructor(sharedSongRepo: SongList) {
         this.repo = sharedSongRepo;
         this.filter = new Filter();
-        this.fetchSongsFromRepo();
+        // this.fetchSongsFromRepo();
         // console.log("Filter in constructor:", this.filter)
     }
 

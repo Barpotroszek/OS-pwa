@@ -16,7 +16,7 @@ export default class SongList {
   }
 
   private _fetchList(): Promise<void | Song[]> {
-    return this.reader.readToJSON("storage-2.json").then(data => {
+    return this.reader.readToJSON("storage.json").then(data => {
       // console.log(data)
       Object.entries(data.titles).forEach(([n, v]) => { 
         this.mainList.push(new Song(Number(n), v as string, data.tags[n]))
@@ -32,8 +32,8 @@ export default class SongList {
   }
 
   public getSong(id: number): Song{
-    let t= this.mainList.find(v => v.id == id)
-    if(t== undefined)
+    let t= this.mainList.find(v => v.id===id)
+    if(t=== undefined)
       t = new Song(0, "Coś poszło nie tak...")
     return t;
   }
