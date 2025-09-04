@@ -1,13 +1,30 @@
+declare global {
+  interface Window { homepage: string; registration: ServiceWorkerRegistration }
+}
+
 export const relativeUrl = (target: string) => {
   return window.homepage + target;
 };
 
 const registerSW = (path: string) => {
-  console.log("[SW] Regitsration")
+  console.log("[SETUP] Registration")
+
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register(relativeUrl(path)).then(function (registration) {
-      console.debug("[SW] Service Worker Registered", registration);
-      
+    navigator.serviceWorker.register(relativeUrl(path), {
+      scope: window.homepage
+    }).then(function (registration) {
+      console.log("Im in registration")
+      if (registration.installing)
+        console.debug("[SETUP] Service Worker installing");
+      else if (registration.waiting)
+        console.debug("[SETUP] Service Worker installed");
+      else if (registration.active)
+        console.debug("[SETUP] Service Worker active :>");
+
+      window.registration = registration;
+      console.log({ registration })
+      // console.debug("[SW] Service Worker Registered", registration);
+
       registration.onupdatefound = () => {
         // Check & notify if app needs to be update
         console.log("[SW] UPDATE: ", registration);
@@ -26,6 +43,7 @@ const registerSW = (path: string) => {
   }
   else console.debug("SW not supported")
 }
+
 
 const sendConfirmation = (reg: ServiceWorkerRegistration) => {
   // ask user if he want to update app
@@ -48,13 +66,19 @@ const setupDarkModeListener = () => {
   });
 }
 
-const notifySW = ()=>{
-    navigator.serviceWorker.controller!.postMessage({ caching: window.matchMedia("(display-mode: standalone)").matches })
+export const enableCaching = () => {
+  // Wyślij mu polecenie, żeby wszystko co ma już po prostu cachował
+  // navigator.serviceWorker.controller!.postMessage({ caching: window.matchMedia("(display-mode: standalone)").matches })
+  if (window.registration.active !== undefined && window.registration.active !== null)
+    window.registration.active.postMessage({ caching: true })
 }
 
 export default function init() {
+  window.homepage = "/OS-pwa/";
+  console.log("[INIT] HomePage:", window.homepage)
   setupDarkModeListener()
-  // registerSW("sw.js");
+
+  registerSW("sw.js");
 
   let theme = window.localStorage.getItem("theme"), mode;
   if (!theme)
@@ -64,11 +88,12 @@ export default function init() {
   window.postMessage({ darkMode: mode });
 
   return;  
+  // TODO: Not working - repair
   // inform SW if PWA is installed
-  if(navigator.serviceWorker.controller !== null)
-    notifySW()
+  if (navigator.serviceWorker.controller !== undefined && navigator.serviceWorker.controller !== null)
+    enableCaching()
   else
-    navigator.serviceWorker.oncontrollerchange = notifySW;
+    navigator.serviceWorker.oncontrollerchange = enableCaching;
 
 }
 
