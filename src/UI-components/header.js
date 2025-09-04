@@ -3,11 +3,14 @@ import "../styles/header.css";
 import "../styles/switch.css";
 
 
-export default function Header({toggleSideNav}) {
+export default function Header({wrapperRef}) {
   const checkboxAction = (v)=>{
     window.postMessage({darkMode: v})  
     }
 
+    const toggleSideNav = ()=> {
+      wrapperRef.current.classList.toggle("active")
+    }
   return (
     <header>
       <div className="menu-button" onClick={toggleSideNav}>

@@ -48,7 +48,7 @@ export const liturgical_tags = {
 }
 
 export const other_tags = {
-    2048: "dzięczynienie i uwielbienie",
+    2048: "dziękczynienie i uwielbienie",
     4096: "pieśni i piosenki próśb",
     8192: "do Ducha Świętego",
     16384: "medytacyjne",

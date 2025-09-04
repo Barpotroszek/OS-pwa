@@ -21,6 +21,15 @@ export default class Filter {
         //     this.onFiltersChange();
     }
 
+    
+    /**
+     * Ustawianie tagu jako filtr, nadpisuje pozostałe tagi
+     * @param value wartość/ID tagu
+     */
+    public setTag(value: number){
+        this.tags = value;
+    }
+
     /**
      * Dodawanie tagu do wyszukiwanych
      * @param value wartość/ID tagu
@@ -51,9 +60,12 @@ export default class Filter {
     }
 
     public validateSong(song: Song){
-        if(song.toString().search(this.rgx) >= 0)
-            return true;
-        return false;
+        // console.log(song.tags, this.tags, (song.tags & this.tags) == this.tags)
+        if((song.tags & this.tags) !== this.tags)
+            return false;
+        if(song.toString().search(this.rgx) < 0)
+            return false;
+        return true;
     }
 
     /**
@@ -67,6 +79,8 @@ export default class Filter {
         const list: Song[] = [];
         songList.forEach(song => { 
             if(song.toString().search(this.rgx) < 0)
+                return;
+            if((song.tags & this.tags) !== this.tags)
                 return;
             list.push(song);
         })

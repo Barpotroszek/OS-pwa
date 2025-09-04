@@ -19,6 +19,9 @@ export default class Song {
     public get id(): number {
         return this._id;
     }
+    public get tags(): number {
+        return this._tags;
+    }
     /**
      * Pobranie tekstu za pośrednictwem zdefiniowanego readera
      */

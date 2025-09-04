@@ -3,7 +3,7 @@ import Song from "../models/Song";
 import SongList from "../models/SongList";
 import { LoadingStates } from "./LoadingStates"
 
-export default class SongBook {
+export default class SongListVM {
     private currentList: Song[] = [];
     private filter: Filter;
     private repo: SongList;
@@ -36,6 +36,12 @@ export default class SongBook {
     /** Dodawanie tagów wyszukania, alias dla Filter.addTag() */
     public addTag(value: number) {
         this.filter.addTag(value)
+        console.log("Tag has been added")
+    }
+
+    /** Ustawianie tagu jako filtr, nadpisuje pozostałe tagi, alias dla Filter.setTag() */
+    public setTag(value: number){
+        this.filter.setTag(value);
     }
 
     /** Usuwanie tagów wyszukania, alias dla Filter.removeTag() */
@@ -62,6 +68,7 @@ export default class SongBook {
         this.repo.fetchList(this.filter).then(list => {
             this.currentList = list;
             this._uiState = LoadingStates.FINISHED;
+            console.log("List has been fetched, running callback:")
             if (this._onLoadEnd)
                 this._onLoadEnd();
         }).catch(e => alert(e))
@@ -73,6 +80,8 @@ export default class SongBook {
      * @returns Lista piosenek pobrana z repo
      */
     public getList(): Song[] {
+        console.log("Downloading list of songs")
+        console.log(this.currentList)
         return this.currentList
     }
 }

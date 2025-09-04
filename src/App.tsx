@@ -3,27 +3,27 @@ import SideNav from "./UI-components/SideNav";
 import "./styles/main.css";
 import MyFileReader from "./MyFileReader";
 import SongList from "./models/SongList";
-import SongBook from "./viewModels/SongListVM";
+import SongListVM from "./viewModels/SongListVM";
 import CurrentSong from "./viewModels/CurrentSong";
 import { pushState } from "./helpers";
 import SongListView from "./view/SongListView";
 import { BackButton } from "./UI-components/button";
 import CurrentSongView from "./view/CurrentSongView";
 // @ts-ignore
-import Header from "./UI-components/header.js"
+import Header from "./UI-components/header.js";
 
 function App() {
-  const [isSideNavActive, updateSideNavState] = useState(false),
-    reader = new MyFileReader(),
+  const reader = new MyFileReader(),
     songListRepo = useRef(new SongList(reader)).current,
-    songListModel = useRef(new SongBook(songListRepo)).current,
+    songListModel = useRef(new SongListVM(songListRepo)).current,
     currentSongRepo = useRef(new CurrentSong(reader)).current;
 
+  const toggleSideNav = useRef<() => void | undefined>(),
+    wrapper = useRef(null);
   const [currentSongID, updateCurrentSong] = useState<number | undefined>();
 
   // URL Parser - żeby sprawdzić czy to aktualna piesn, itp itd
   useEffect(() => {
-
     songListRepo.loadingProcess.then(() => {
       const id = new URL(window.location.href).searchParams.get("id");
       if (id == null) updateCurrentSong(undefined);
@@ -39,14 +39,13 @@ function App() {
   };
 
   const tagChosenCallback = (tag: number) => {
-    songListModel.addTag(tag);
+    songListModel.setTag(tag);
     songListModel.fetchSongsFromRepo();
-  }
+    // @ts-ignore
+    wrapper.current.classList.remove("active");
+  };
 
   window.onpopstate = backCallback;
-  const toggleSideNav = () => {
-    updateSideNavState(!isSideNavActive);
-  };
 
   let MainBlock: React.ReactElement;
 
@@ -72,11 +71,8 @@ function App() {
 
   return (
     <>
-      <Header toggleSideNav={toggleSideNav} />
-      <div
-        id="main-wrapper"
-        className={`flex-center ${isSideNavActive ? "active" : " "}`}
-      >
+      <Header wrapperRef={wrapper} />
+      <div id="main-wrapper" ref={wrapper} className={`flex-center`}>
         <SideNav onTagChosen={tagChosenCallback} />
         {MainBlock}
       </div>

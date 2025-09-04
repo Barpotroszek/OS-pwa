@@ -18,7 +18,7 @@ export default class SongList {
   private _fetchList(): Promise<void | Song[]> {
     return this.reader.readToJSON("storage-2.json").then(data => {
       // console.log(data)
-      Object.entries(data.title).forEach(([n, v]) => { 
+      Object.entries(data.titles).forEach(([n, v]) => { 
         this.mainList.push(new Song(Number(n), v as string, data.tags[n]))
       })
     })
