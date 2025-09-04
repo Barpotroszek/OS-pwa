@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import SideNav from "./UI-components/SideNav";
+import URLManager from "./infrastructure/URLManager";
 import "./styles/main.css";
 import MyFileReader from "./MyFileReader";
 import SongList from "./models/SongList";
 import SongListVM from "./viewModels/SongListVM";
 import CurrentSong from "./viewModels/CurrentSong";
-import { pushState } from "./helpers";
-import SongListView from "./view/SongListView";
+import SideNav from "./UI-components/SideNav";
 import { BackButton } from "./UI-components/button";
+import SongListView from "./view/SongListView";
 import CurrentSongView from "./view/CurrentSongView";
 // @ts-ignore
 import Header from "./UI-components/header.js";
@@ -19,7 +19,7 @@ function App() {
     currentSongRepo = useRef(new CurrentSong(reader)).current;
 
   const wrapper = useRef(null),
-   [currentSongID, updateCurrentSong] = useState<number | undefined>();
+    [currentSongID, updateCurrentSong] = useState<number | undefined>();
 
   // URL Parser - żeby sprawdzić co ma wyświetlić
   useEffect(() => {
@@ -36,24 +36,34 @@ function App() {
     songListModel.fetchSongsFromRepo();
   }, []);
 
-  const backCallback = () => {
-    const url = new URL(window.location.href);
-    url.searchParams.delete("id");
+
+  const songChosenCallback = (id: number) => {
+    URLManager.setSearchParam("id", String(id));
+    updateCurrentSong(id)
+  }
+
+  const songExitCallback = () => {
+    URLManager.deleteSearchParam("id");
     updateCurrentSong(0);
-    pushState(url.href);
   };
 
   const tagChosenCallback = (tag: number) => {
-    const url = new URL(window.location.href);
-    url.searchParams.append("tag", tag.toString())
-    pushState(url.href);
+    URLManager.setSearchParam("tag", tag.toString());
     songListModel.setTag(tag);
     songListModel.fetchSongsFromRepo();
     // @ts-ignore
     wrapper.current.classList.remove("active");
+    songExitCallback()
   };
 
-  window.onpopstate = backCallback;
+  
+  const listBackCallback = () => {
+    URLManager.deleteSearchParam("tag");
+    songListModel.clearTags();
+    songListModel.fetchSongsFromRepo();
+  }
+
+  window.onpopstate = songExitCallback;
 
   let MainBlock: React.ReactElement;
 
@@ -63,7 +73,7 @@ function App() {
     MainBlock = (
       <main id="songDisplayer">
         <CurrentSongView repo={currentSongRepo} />
-        <BackButton cb={backCallback} />
+        <BackButton cb={songExitCallback} />
       </main>
     );
   } else
@@ -71,9 +81,9 @@ function App() {
       <main>
         <SongListView
           viewModel={songListModel}
-          onClick={(id: number) => updateCurrentSong(id)}
+          onClick={songChosenCallback}
         />
-        <BackButton cb={backCallback} />
+        <BackButton cb={listBackCallback} />
       </main>
     );
 

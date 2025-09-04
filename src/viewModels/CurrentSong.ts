@@ -20,7 +20,7 @@ export default class CurrentSong {
 
     public setNewSong(song: Song | undefined){
         this.songRepo = song;
-        if(this.songRepo == undefined)
+        if(this.songRepo === undefined)
             this.content = "Nie znaleziono tekstu...";
         else
             this.loadingProcess = this.songRepo.fetchLyrics(this.reader)
@@ -30,7 +30,7 @@ export default class CurrentSong {
      * Pobieranie tekstu piosenki za pośrednictwem (jakiegoś) readera
      */
     public async getLyrics(): Promise<string> {
-        if(this.loadingProcess != undefined)
+        if(this.loadingProcess !== undefined)
             this.content = await this.loadingProcess
         else
             this.content = "Nie znaleziono tekstu..."

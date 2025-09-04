@@ -1,8 +1,4 @@
-declare global {
-  interface Window { homepage: string; registration: ServiceWorkerRegistration }
-}
-
-export const relativeUrl = (target: string) => {
+ export const relativeUrl = (target: string) => {
   return window.homepage + target;
 };
 

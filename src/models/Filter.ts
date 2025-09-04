@@ -5,10 +5,6 @@ export default class Filter {
     private rgx: RegExp = RegExp("");
     private tags: number = 0;
 
-    constructor(){
-        // console.log("Stworzono nowy Filter;\n", this.rgx)
-    }
-
     /**
      * Dodanie tekstu do wyszukiwania w filtrach
      * 
@@ -38,6 +34,11 @@ export default class Filter {
         this.tags |= value;
         // if(this.onFiltersChange != undefined)
         //     this.onFiltersChange();
+    }
+
+    /** Usuwanie wszystkich tagów */
+    public clearTags(){
+        this.tags = 0;
     }
 
     /**

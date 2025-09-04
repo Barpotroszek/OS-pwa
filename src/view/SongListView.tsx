@@ -3,7 +3,7 @@ import "../styles/titlesList.css";
 import "../styles/searchbar.css";
 import SongBook from "../viewModels/SongListVM";
 import Song from "../models/Song";
-import { pushState } from "../helpers";
+import URLManager from "src/infrastructure/URLManager";
 
 export default function SongListView({ viewModel, onClick }: { viewModel: SongBook, onClick: (id:number)=>void }) {
   const [enteredInput, updateInput] = useState("");
@@ -18,17 +18,8 @@ export default function SongListView({ viewModel, onClick }: { viewModel: SongBo
     viewModel.fetchSongsFromRepo();
   };
 
-  const chooseSongCb = (id: number) => {
-    // alert("Przeniesienie do: " + id);
-    const path = new URL(window.location.href);
-    path.pathname = path.pathname.replace(/\/$/, "");
-    path.searchParams.set("id", String(id));
-    pushState(path.href);
-    onClick(id)
-  };
-
   let myBody: () => React.JSX.Element;
-  if (list.length > 0) myBody = () => ItemsListFabric(list, chooseSongCb);
+  if (list.length > 0) myBody = () => ItemsListFabric(list, onClick);
   else myBody = () => SthWentWrong();
 
   return (

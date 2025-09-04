@@ -49,6 +49,10 @@ export default class SongListVM {
         this.filter.removeTag(value)
     }
 
+    public clearTags(){
+        this.filter.clearTags();
+    }
+
     /** Ustawianie tekstu do wyszukania, alias dla Filter.setSearchQuery() */
     public setSearchQuery(value: string) {
         this.filter.setSearchQuery(value)

@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/sideNav.css";
 import "../styles/tableRows.css";
-import { liturgical_tags, other_tags, Tag } from "../models/Tags";
+import { liturgical_tags, other_tags } from "../models/Tags";
 
 export default function SideNav({
   onTagChosen,

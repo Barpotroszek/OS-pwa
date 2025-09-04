@@ -1,6 +1,4 @@
-import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 import MyFileReader from "../MyFileReader";
-import CurrentSong from "../viewModels/CurrentSong";
 import Filter from "./Filter";
 import Song from "./Song";
 
