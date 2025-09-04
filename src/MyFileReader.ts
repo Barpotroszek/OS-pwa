@@ -1,19 +1,14 @@
-//@ts-nocheck
+import { STORAGE_DIR, STORAGE_FILE } from "./infrastructure/paths";
+import URLManager from "./infrastructure/URLManager";
 
 export default class MyFileReader {
-  filePath: string;
+  filePath: string = "";
   data: any;
-  resp: Promise<Response>;
+  // resp: Promise<Response> | undefined;
 
-  public createRequest(url: String | Number = null): Promise<Response>{
+  public createRequest(url: String | Number = ""): Promise<Response>{
     // console.debug("[MyFileReader] Createing request\nReader:", {url})
-    
-    const path = new URL(window.location.href)
-    path.pathname = path.pathname.replace(/\/$/,'')
-    this.filePath = path.pathname + (url == null ? "/store/storage.json":"/store/" + url);
-    
-    // to make this .. url work as should, as relative :')
-    // console.log("FILEPATH:",{ filePath: this.filePath });
+    this.filePath = URLManager.relativePath(STORAGE_DIR + (url == null ? STORAGE_FILE: url));
     
     return fetch(this.filePath)
   }
