@@ -16,8 +16,13 @@ button.outline {
 }
 
 button:active,
-button:hover {
+button:hover,
+button:disabled {
     filter: brightness(0.8);
+}
+
+button:disabled {
+    cursor:normal;
 }
 
 .pos-right {

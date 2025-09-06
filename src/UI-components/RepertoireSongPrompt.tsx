@@ -9,7 +9,6 @@ export default function RepertoireSongPrompt() {
 
   const displayPrompt = () => ref.current?.classList.add("active");
   const hidePrompt = () => ref.current?.classList.remove("active");
-
   repertoire.displayPrompt = displayPrompt;
 
   const onSubmit: FormEventHandler = (event) => {
@@ -22,11 +21,7 @@ export default function RepertoireSongPrompt() {
 
   return (
     // <div >
-    <form
-      className="nav prompt active grid-column"
-      ref={ref}
-      onSubmit={onSubmit}
-    >
+    <form className="prompt grid-column" ref={ref} onSubmit={onSubmit}>
       <h3 className="text-center primary-underline">Dodaj do repertuaru</h3>
       <p>Obecnie otwarta pieśń ma być ustawiona na:</p>
       <select name="song-option" ref={selectRef}>

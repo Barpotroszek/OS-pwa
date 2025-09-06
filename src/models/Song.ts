@@ -27,7 +27,7 @@ export default class Song {
      */
     public fetchLyrics(reader: MyFileReader) {
         let path: string;
-        if (this._file != "")
+        if (this._file !== "")
             path = this._file
         else
             path = this._id + ".md"

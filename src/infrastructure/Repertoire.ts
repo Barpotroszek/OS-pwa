@@ -1,12 +1,15 @@
-import { MutableRefObject, RefObject } from "react";
+import { callbackWithBoolean, callbackWithoutArgument } from "./types/global";
 
 type RepertoireTarget = "Wejście" | "Ofiarowanie" | "Komunia" | "Uwielbienie" | "Zakończenie";
 export const repertoireTargets = ["Wejście", "Ofiarowanie", "Komunia", "Uwielbienie", "Zakończenie"];
 
 class Repertoire {
     private data: Map<string, number> = new Map();
-    public displayPrompt: () => void = () => { };
-    private _onUpdate: (() => void) | undefined;
+    public displayPrompt: callbackWithoutArgument= () => { };
+    private _onUpdate: callbackWithoutArgument | undefined;
+    public setAddSongButtonDisabled: callbackWithBoolean = (t)=>{
+        console.log("[Repertoire] Adding btn disabler not assigned")
+    }
 
     /** Ustawia callback, jeśli nie był on wcześniej zdefiniwany */
     public set onUpdate(callback: () => void) {
@@ -42,8 +45,15 @@ class Repertoire {
 
     public getSong(target: RepertoireTarget | string) {
         let data = this.data.get(target)
-        console.log("[Repertoire] getting", target, '=>', data)
+        // console.log("[Repertoire] getting", target, '=>', data)
         return data
+    }
+    /** Czyszczenie całego repertuaru, usunięcie wszystkich pozycji */
+    public clear(){
+        this.data.clear()
+        repertoireTargets.forEach(t=>localStorage.removeItem(t))
+        if (this._onUpdate !== undefined)
+            this._onUpdate();
     }
 
     public export(): string {

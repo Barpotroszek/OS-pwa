@@ -96,7 +96,7 @@ function App() {
         categoriesNavRef={categoriesNavRef}
         settingsNavRef={settingsNavRef}
       />
-      <SongContext.Provider value={{setNewSong: songChosenCallback}} >
+      <SongContext.Provider value={{setNewSong: songChosenCallback, isSongChosen: ( currentSongID !== undefined && currentSongID > 0 )}} >
       <div id="main-wrapper" className="flex-center max-width">
         <div className="hidding-wrapper">
           <CategoriesNav
