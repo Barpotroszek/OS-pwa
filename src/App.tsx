@@ -5,21 +5,27 @@ import MyFileReader from "./MyFileReader";
 import SongList from "./models/SongList";
 import SongListVM from "./viewModels/SongListVM";
 import CurrentSong from "./viewModels/CurrentSong";
-import SideNav from "./UI-components/SideNav";
-import { BackButton } from "./UI-components/button";
+import CategoriesNav from "./UI-components/CategoriesNav";
+import { BackButton } from "./UI-components/backButton";
 import SongListView from "./view/SongListView";
 import CurrentSongView from "./view/CurrentSongView";
 // @ts-ignore
-import Header from "./UI-components/header.js";
+import Header from "./UI-components/header";
+import Settings from "./infrastructure/settings";
+import SettingsNav from "./UI-components/SettingsNav";
+import RepertoireSongPrompt from "./UI-components/RepertoireSongPrompt";
 
 function App() {
   const reader = new MyFileReader(),
     songListRepo = useRef(new SongList(reader)).current,
     songListModel = useRef(new SongListVM(songListRepo)).current,
-    currentSongRepo = useRef(new CurrentSong(reader)).current;
+    currentSongRepo = useRef(new CurrentSong(reader)).current,
+    categoriesNavRef = useRef<HTMLElement>(null),
+    settingsNavRef = useRef<HTMLElement>(null);
 
-  const wrapper = useRef(null),
-    [currentSongID, updateCurrentSong] = useState<number | undefined>();
+  const [currentSongID, updateCurrentSong] = useState<number | undefined>();
+
+  Settings.apply();
 
   // URL Parser - żeby sprawdzić co ma wyświetlić
   useEffect(() => {
@@ -36,11 +42,10 @@ function App() {
     songListModel.fetchSongsFromRepo();
   }, []);
 
-
   const songChosenCallback = (id: number) => {
     URLManager.setSearchParam("id", String(id));
-    updateCurrentSong(id)
-  }
+    updateCurrentSong(id);
+  };
 
   const songExitCallback = () => {
     URLManager.deleteSearchParam("id");
@@ -51,20 +56,20 @@ function App() {
     URLManager.setSearchParam("tag", tag.toString());
     songListModel.setTag(tag);
     songListModel.fetchSongsFromRepo();
+
     // @ts-ignore
-    wrapper.current.classList.remove("active");
-    songExitCallback()
+    categoriesNavRef.current.classList.remove("active");
+    // Na wypadek, jakby aktualnie była wyświetlana jakaś piosenka:
+    songExitCallback();
   };
 
-  
   const listBackCallback = () => {
     URLManager.deleteSearchParam("tag");
     songListModel.clearTags();
     songListModel.fetchSongsFromRepo();
-  }
+  };
 
   window.onpopstate = songExitCallback;
-
   let MainBlock: React.ReactElement;
 
   if (currentSongID !== undefined && currentSongID > 0) {
@@ -79,19 +84,26 @@ function App() {
   } else
     MainBlock = (
       <main>
-        <SongListView
-          viewModel={songListModel}
-          onClick={songChosenCallback}
-        />
+        <SongListView viewModel={songListModel} onClick={songChosenCallback} />
         <BackButton cb={listBackCallback} />
       </main>
     );
 
   return (
     <>
-      <Header wrapperRef={wrapper} />
-      <div id="main-wrapper" ref={wrapper} className={`flex-center`}>
-        <SideNav onTagChosen={tagChosenCallback} />
+      <Header
+        categoriesNavRef={categoriesNavRef}
+        settingsNavRef={settingsNavRef}
+      />
+      <div id="main-wrapper" className="flex-center max-width">
+        <div className="hidding-wrapper">
+          <CategoriesNav
+            reference={categoriesNavRef}
+            onTagChosen={tagChosenCallback}
+          />
+          <SettingsNav reference={settingsNavRef} />
+          <RepertoireSongPrompt />
+        </div>
         {MainBlock}
       </div>
     </>

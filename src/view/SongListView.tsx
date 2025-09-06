@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
-import "../styles/titlesList.css";
+import "../styles/table.css";
 import "../styles/searchbar.css";
 import SongBook from "../viewModels/SongListVM";
 import Song from "../models/Song";
-import URLManager from "src/infrastructure/URLManager";
 
-export default function SongListView({ viewModel, onClick }: { viewModel: SongBook, onClick: (id:number)=>void }) {
+export default function SongListView({
+  viewModel,
+  onClick,
+}: {
+  viewModel: SongBook;
+  onClick: (id: number) => void;
+}) {
   const [enteredInput, updateInput] = useState("");
   const [list, updateList] = useState(viewModel.getList());
 
@@ -24,7 +29,7 @@ export default function SongListView({ viewModel, onClick }: { viewModel: SongBo
 
   return (
     <>
-      <h2>Wybierz pieśń z listy:</h2>
+      <h2 className="primary-underline">Wybierz pieśń z listy:</h2>
       <div id="searchbar">
         <input
           type="text"
@@ -55,7 +60,7 @@ function SthWentWrong() {
 function ItemsListFabric(items: Song[], cb: (id: number) => void) {
   return (
     <table id="titlesList">
-      <tbody>
+      <tbody className="hoverable">
         {items.map((item, _) => {
           return <SongTitleItem item={item} key={item.id} cb={cb} />;
         })}
@@ -68,7 +73,7 @@ function ItemsListFabric(items: Song[], cb: (id: number) => void) {
  * Elementy wyświetlane na tablicy/w liście
  * @param item piosenka typu Song
  * @param cb - co zrobić, jak zostane naciśnięte
- * @returns 
+ * @returns
  */
 function SongTitleItem({ item, cb }: { item: Song; cb: any }) {
   return (

@@ -1,0 +1,28 @@
+.prompt {
+    width: max-content;
+    align-self: center;
+    justify-self: center;
+    padding: 1.5em;
+    background-color: var(--main-content-box-color);
+    display: grid;
+    justify-items: center;
+    gap: .5em;
+    border-radius: 1em;
+    opacity: 0;
+    transition: opacity .2s;
+}
+
+.prompt.active {
+    opacity: 1;
+}
+
+.prompt * {
+    margin: .2em;
+}
+
+.prompt select {
+    font-size: inherit;
+    padding: .3em;
+    color: inherit;
+    background-color: inherit;
+}

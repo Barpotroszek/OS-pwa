@@ -18,14 +18,17 @@ export default class URLManager {
         this.pushState(this.location.href);
     }
 
+    public static getSearchParam(name: string): string | null {
+        return this.location.searchParams.get(name)
+    }
+
     public static deleteSearchParam(name: string) {
         this.location.searchParams.delete(name);
         this.pushState(this.location.href);
     }
 
     public static relativePath(url: string): string {
-        let loc = this.location.pathname.replace(/\/$/,'') + url;
-        console.log({loc})
+        let loc = this.location.pathname.replace(/\/$/, '') + url;
         return loc
     }
 }

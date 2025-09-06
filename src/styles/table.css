@@ -1,0 +1,56 @@
+table {
+    list-style-type: none;
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    overflow-x: hidden !important;
+    /* height: 80em; */
+    max-height: 60vh !important;
+
+    background-color: var(--main-content-box-color);
+    border-spacing: 0;
+    margin: 1em 0;
+}
+
+#titlesList {
+    overflow-y: scroll;
+}
+
+
+tbody {
+    max-height: 60vh;
+    height: inherit;
+}
+
+/* Hoverable - tu: ruszają się po najechaniu + czerwony tekst */
+
+tr {
+    /* font-weight:  500; */
+    width: 100%;
+    height: max-content;
+    padding: .4em .3em;
+    display: block;
+    box-sizing: border-box;
+    /* border-bottom: .01em solid #80808081; */
+    /* margin: .1em 0; */
+    transition: .1s ease-in-out;
+}
+
+.hoverable tr {
+    cursor: pointer;
+    color: var(--tr-font-color);
+
+}
+
+.hoverable tr:nth-child(even) {
+    background-color: var(--table-odd-background-color);
+}
+
+
+.hoverable tr:hover {
+    transform: scale(1.05) translate(1em);
+}
+
+tr.active {
+    transform: scale(0.98);
+}

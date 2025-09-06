@@ -12,7 +12,7 @@ header .menu-button {
     background: transparent;
     padding: 0;
     border: 0;
-    fill:white;
+    fill: white;
     height: 2em;
     width: 2em;
     justify-content: center;
@@ -20,16 +20,20 @@ header .menu-button {
     display: flex;
 }
 
-.menu-button:hover{
+.menu-button:hover {
     background-color: var(--secondary-color);
 }
 
-.menu-button > * {
+.menu-button>svg {
+    /* Ten burger menu, prawy */
     height: 1.5em;
     width: 1.5em;
     margin: 0 auto;
 }
-header img{
-    height: 3em;
-  }
-    
+
+.menu-button>img {
+    /* Tagi, lewy */
+    height: 2em;
+    width: 2em;
+    margin: 0 auto;
+}
