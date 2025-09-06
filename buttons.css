@@ -7,12 +7,24 @@ button {
     border-radius: .2em;
     color: var(--light-font-color);
     font-weight: bold;
+    transition: all .2s;
 }
 
-button:active, button:hover {
-    filter: brightness(0.9);
+button.outline {
+    background-color: transparent !important;
+    border: .1em solid var(--primary-color);
 }
 
-.pos-right{
+button:active,
+button:hover,
+button:disabled {
+    filter: brightness(0.8);
+}
+
+button:disabled {
+    cursor:normal;
+}
+
+.pos-right {
     float: right
 }
