@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import CurrentSong from "../viewModels/CurrentSong";
+import CurrentSong from "../viewModels/CurrentSongVM";
 // @ts-ignore
 import HTMLConverter from "../htmlConverter.js";
 

@@ -16,6 +16,7 @@ export default class Settings {
     }
 
     public static changeDarkModeCallback(isDark: boolean) {
+        // placeholder
     }
 
     public static get isDarkMode(): boolean {

@@ -8,7 +8,6 @@ export default class CurrentSong {
     private _onLoadEnd: ((text: string) => void) | undefined;
     private finished: boolean = true;
     private loadingProcess: Promise<string> | undefined
-    // private uiState: LoadingStates;
 
     public set onLoadEnd(v: (text: string) => void) {
         this._onLoadEnd = v;
@@ -43,7 +42,6 @@ export default class CurrentSong {
 
     /**
      * Pobieranie tekstu piosenki za pośrednictwem (jakiegoś) readera
-     * @deprecated
      */
     public async getLyrics(): Promise<string> {
         if (this.loadingProcess !== undefined)

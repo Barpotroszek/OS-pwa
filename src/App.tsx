@@ -4,7 +4,7 @@ import "./styles/main.css";
 import MyFileReader from "./MyFileReader";
 import SongList from "./models/SongList";
 import SongListVM from "./viewModels/SongListVM";
-import CurrentSong from "./viewModels/CurrentSong";
+import CurrentSong from "./viewModels/CurrentSongVM";
 import CategoriesNav from "./UI-components/CategoriesNav";
 import { BackButton } from "./UI-components/backButton";
 import SongListView from "./view/SongListView";
