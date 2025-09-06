@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "../styles/table.css";
 import "../styles/searchbar.css";
 import SongBook from "../viewModels/SongListVM";
 import Song from "../models/Song";
+import { SongContext } from "src/contexts/SongContext";
 
 export default function SongListView({
   viewModel,
-  onClick,
 }: {
   viewModel: SongBook;
-  onClick: (id: number) => void;
 }) {
   const [enteredInput, updateInput] = useState("");
   const [list, updateList] = useState(viewModel.getList());
@@ -24,7 +23,7 @@ export default function SongListView({
   };
 
   let myBody: () => React.JSX.Element;
-  if (list.length > 0) myBody = () => ItemsListFabric(list, onClick);
+  if (list.length > 0) myBody = () => ItemsListFabric(list);
   else myBody = () => SthWentWrong();
 
   return (
@@ -55,14 +54,14 @@ function SthWentWrong() {
 /**
  * Odpowiada za stworzenie elementów do tablicy na podstawie podanej listy
  * @param items lista pieśni do umieszczenia w tablicy
- * @param cb callback uruchamiany po wybraniu danej pozycji
  */
-function ItemsListFabric(items: Song[], cb: (id: number) => void) {
+function ItemsListFabric(items: Song[]) {
+  const songContext = useContext(SongContext);
   return (
     <table id="titlesList">
       <tbody className="hoverable">
         {items.map((item, _) => {
-          return <SongTitleItem item={item} key={item.id} cb={cb} />;
+          return <SongTitleItem item={item} key={item.id} cb={songContext?.setNewSong} />;
         })}
       </tbody>
     </table>

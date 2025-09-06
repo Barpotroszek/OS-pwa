@@ -1,25 +1,40 @@
-import React, { RefObject, useEffect, useState } from "react";
+import React, {
+  RefObject,
+  useContext,
+  createContext,
+  useEffect,
+  useState,
+} from "react";
 import "../styles/sideNav.css";
 import "../styles/settingsNav.css";
 import "../styles/switch.css";
 import Settings from "src/infrastructure/settings";
 import { repertoireTargets } from "src/infrastructure/Repertoire";
 import { useRepertoire } from "src/hooks/useRepertoire";
+import { SongContext } from "src/contexts/SongContext";
+import {
+  callbackWithNumber,
+  callbackWithoutArgument,
+} from "src/infrastructure/types/global";
+
+interface SettingsNavContextInterface {
+  setNewSong: callbackWithNumber;
+  hideNav: callbackWithoutArgument;
+}
+
+const settingsNavContext = createContext<SettingsNavContextInterface | null>(
+  null
+);
 
 export default function SettingsNav({
   reference,
 }: {
   reference: RefObject<HTMLElement>;
 }) {
-  const [isDarkTheme, _changeTheme] = useState(Settings.isDarkMode);
-  /** Wrapper do oryginalnej funkcji */
+  const [isDarkTheme, _changeTheme] = useState(Settings.isDarkMode),
+    songContext = useContext(SongContext);
 
-  const _songChosenCallback = (id: number) => {
-    reference.current?.classList.remove("active");
-    // songChosenCallback(id);
-  };
-
-  const hideNav = () => {
+  const hideNav: callbackWithoutArgument = () => {
     reference.current?.classList.remove("active");
   };
 
@@ -39,42 +54,47 @@ export default function SettingsNav({
 
   return (
     // @ts-ignore
-    <nav id="settings" className="sideNav" ref={reference}>
-      <h3 className="text-center primary-underline">Ustawienia</h3>
-      <div className="container">
-        <div>Ciemny motyw</div>
-        <div>
-          <label className="switch">
-            <input
-              type="checkbox"
-              id="dark-mode-switch"
-              onChange={(e) => changeTheme(e.target.checked)}
-              checked={isDarkTheme}
-            />
-            <span className="slider" />
-          </label>
+    <settingsNavContext.Provider>
+      <nav id="settings" className="sideNav" ref={reference}>
+        <h3 className="text-center primary-underline">Ustawienia</h3>
+        <div className="container">
+          <div>Ciemny motyw</div>
+          <div>
+            <label className="switch">
+              <input
+                type="checkbox"
+                id="dark-mode-switch"
+                onChange={(e) => changeTheme(e.target.checked)}
+                checked={isDarkTheme}
+              />
+              <span className="slider" />
+            </label>
+          </div>
+          <div>Rozmiar tekstu</div>
+          <div className="items-row">
+            <button className="square">-</button>
+            <button className="square">+</button>
+          </div>
         </div>
-        <div>Rozmiar tekstu</div>
-        <div className="items-row">
-          <button className="square">-</button>
-          <button className="square">+</button>
-        </div>
-      </div>
-      <br />
-      <RepertoireView onDisplayPrompt={hideNav} />
-    </nav>
+        <br />
+        <RepertoireView hideNav={hideNav} />
+      </nav>
+    </settingsNavContext.Provider>
   );
 }
 
-function RepertoireView({ onDisplayPrompt }: { onDisplayPrompt: () => void }) {
-  // const [t_value, forceUpdate] = useState(0);
+function RepertoireView({ hideNav }: { hideNav: callbackWithoutArgument }) {
   const repertoire = useRepertoire();
-
-  // repertoire = useRepertoire();
+  const songContext = useContext(SongContext);
 
   const displayPrompt = () => {
-    onDisplayPrompt();
+    hideNav();
     repertoire.displayPrompt();
+  };
+
+  const chooseSongCallback: callbackWithNumber = (id) => {
+    hideNav();
+    songContext?.setNewSong(id);
   };
 
   console.log("[RepertoireView] reRender");
@@ -86,7 +106,11 @@ function RepertoireView({ onDisplayPrompt }: { onDisplayPrompt: () => void }) {
       </h3>
       <div className="container" key={key} data-key={key}>
         {repertoireTargets.map((target) => (
-          <RepertoireElem target={target} songID={repertoire.getSong(target)} />
+          <RepertoireElem
+            target={target}
+            songID={repertoire.getSong(target)}
+            chooseSongCallback={chooseSongCallback}
+          />
         ))}
 
         <div className="cols-2 mg-top-1">
@@ -102,9 +126,11 @@ function RepertoireView({ onDisplayPrompt }: { onDisplayPrompt: () => void }) {
 function RepertoireElem({
   target,
   songID,
+  chooseSongCallback,
 }: {
   target: string;
   songID: number | undefined;
+  chooseSongCallback: callbackWithNumber;
 }) {
   const placeholder = "_____";
   console.log("[SettingsNav]", target, songID);
@@ -114,7 +140,7 @@ function RepertoireElem({
       {songID !== undefined ? (
         <button
           className="song-item"
-          // onClick={() => _songChosenCallback(songID)}
+          onClick={() => chooseSongCallback(songID)}
         >
           {songID}
         </button>

@@ -14,6 +14,7 @@ import Header from "./UI-components/header";
 import Settings from "./infrastructure/settings";
 import SettingsNav from "./UI-components/SettingsNav";
 import RepertoireSongPrompt from "./UI-components/RepertoireSongPrompt";
+import { SongContext } from "./contexts/SongContext";
 
 function App() {
   const reader = new MyFileReader(),
@@ -69,7 +70,7 @@ function App() {
     songListModel.fetchSongsFromRepo();
   };
 
-  window.onpopstate = songExitCallback;
+  window.onpopstate = songExitCallback; 
   let MainBlock: React.ReactElement;
 
   if (currentSongID !== undefined && currentSongID > 0) {
@@ -84,7 +85,7 @@ function App() {
   } else
     MainBlock = (
       <main>
-        <SongListView viewModel={songListModel} onClick={songChosenCallback} />
+        <SongListView viewModel={songListModel} />
         <BackButton cb={listBackCallback} />
       </main>
     );
@@ -95,6 +96,7 @@ function App() {
         categoriesNavRef={categoriesNavRef}
         settingsNavRef={settingsNavRef}
       />
+      <SongContext.Provider value={{setNewSong: songChosenCallback}} >
       <div id="main-wrapper" className="flex-center max-width">
         <div className="hidding-wrapper">
           <CategoriesNav
@@ -106,6 +108,7 @@ function App() {
         </div>
         {MainBlock}
       </div>
+      </SongContext.Provider>
     </>
   );
 }

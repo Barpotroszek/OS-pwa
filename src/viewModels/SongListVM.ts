@@ -83,7 +83,7 @@ export default class SongListVM {
      * @returns Lista piosenek pobrana z repo
      */
     public getList(): Song[] {
-        console.debug("[SongListVM] Downloading list of songs")
+        console.debug("[SongListVM] Getting list of songs")
         // console.log(this.currentList)
         return this.currentList
     }
