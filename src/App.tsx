@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import URLManager from "./infrastructure/URLManager";
 import "./styles/main.css";
+import "./styles/songView.css";
 import MyFileReader from "./MyFileReader";
 import SongList from "./models/SongList";
 import SongListVM from "./viewModels/SongListVM";
@@ -77,7 +78,7 @@ function App() {
     currentSongRepo.setNewSong(songListRepo.getSong(currentSongID));
     console.log({ currentSongID });
     MainBlock = (
-      <main id="songDisplayer">
+      <main id="songView">
         <CurrentSongView repo={currentSongRepo} />
         <BackButton cb={songExitCallback} />
       </main>

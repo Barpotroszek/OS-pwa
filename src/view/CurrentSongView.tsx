@@ -1,20 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CurrentSong from "../viewModels/CurrentSongVM";
 // @ts-ignore
 import HTMLConverter from "../htmlConverter.js";
+import Settings from "src/infrastructure/settings";
 
 export default function CurrentSongView({ repo }: { repo: CurrentSong }) {
-  const [lyrics, updateLyrics] = useState("Ładowanie...");
+  const [lyrics, updateLyrics] = useState("Ładowanie..."),
+    lyricsBlockRef = useRef<HTMLElement>();
+
   useEffect(() => {
     repo.onLoadEnd = (data) => {
       console.debug("[CurrentSongView] Loading lyrics in callback");
       updateLyrics(HTMLConverter(data));
       console.debug("[CurrentSongView] Lyrics loaded");
     };
+
+    Settings.changeTextSizeCallback = (size) => {
+      lyricsBlockRef.current?.style.setProperty("--size", size+"em")
+    }
   }, []);
 
   const Lyrics = React.createElement("section", {
     dangerouslySetInnerHTML: { __html: lyrics },
+    className: "lyrics",
+    ref: lyricsBlockRef
   });
 
   return (

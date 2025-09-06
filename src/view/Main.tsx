@@ -37,7 +37,7 @@ export function MainBlock({
     currentSongRepo.setNewSong(songListRepo.getSong(currentSongID));
     console.log({ currentSongID });
     return (
-      <main id="songDisplayer">
+      <main id="songView">
         <CurrentSongView repo={currentSongRepo} />
         {/* <BackButton cb={songExitCallback} /> */}
       </main>

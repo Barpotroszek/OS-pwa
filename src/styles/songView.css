@@ -1,0 +1,25 @@
+#songView > section {
+    margin: 1em auto;
+    width: fit-content;
+    text-indent: .2em;
+}
+
+
+@media (orientation: portrait) {
+    #songView > section {
+        text-indent: 0;
+    }
+}
+
+em {
+    font-weight: bold;
+}
+
+#songView > section * {
+    margin: .5em 0;
+}
+/* .lyrics{color: red} */
+#songView .lyrics {
+    /* --size: attr(data-size); */
+    font-size: var(--size);
+}

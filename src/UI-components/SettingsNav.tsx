@@ -13,7 +13,6 @@ import { repertoireTargets } from "src/infrastructure/Repertoire";
 import { useRepertoire } from "src/hooks/useRepertoire";
 import { SongContext } from "src/contexts/SongContext";
 import {
-  callbackWithBoolean,
   callbackWithNumber,
   callbackWithoutArgument,
 } from "src/infrastructure/types/global";
@@ -73,8 +72,8 @@ export default function SettingsNav({
         </div>
         <div>Rozmiar tekstu</div>
         <div className="items-row">
-          <button className="square">-</button>
-          <button className="square">+</button>
+          <button className="square" onClick={Settings.decreaseTextSize}>-</button>
+          <button className="square" onClick={Settings.increaseTextSize}>+</button>
         </div>
       </div>
       <br />
@@ -141,7 +140,6 @@ function RepertoireElem({
   chooseSongCallback: callbackWithNumber;
 }) {
   const placeholder = "_____";
-  console.trace("Trace of this:");
   console.log("[SettingsNav]", target, songID);
   return (
     <>
