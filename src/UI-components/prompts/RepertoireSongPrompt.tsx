@@ -1,5 +1,5 @@
 import React, { FormEventHandler, useRef } from "react";
-import "../styles/repertoireSongPrompt.css";
+import "../../styles/prompt.css";
 import repertoire from "src/infrastructure/Repertoire";
 import URLManager from "src/infrastructure/URLManager";
 

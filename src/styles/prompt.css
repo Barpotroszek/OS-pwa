@@ -1,18 +1,22 @@
 .prompt {
-    width: max-content;
+    /* width: max-content; */
+    max-width: 90vw;
     align-self: center;
     justify-self: center;
     padding: 1.5em;
     background-color: var(--main-content-box-color);
-    display: grid;
+    /* display: grid; */
     justify-items: center;
     gap: .5em;
     border-radius: 1em;
     opacity: 0;
     transition: opacity .2s;
+
+    display: none;
 }
 
 .prompt.active {
+    display: grid;
     opacity: 1;
 }
 
@@ -20,9 +24,22 @@
     margin: .2em;
 }
 
-.prompt select {
+.prompt select,
+.prompt input {
     font-size: inherit;
     padding: .3em;
     color: inherit;
     background-color: inherit;
+    border-radius: .2em;
+}
+
+.prompt .input::after {
+    display: block;
+    content: "...";
+}
+
+.prompt p{
+    text-align: justify;
+    width: fit-content;
+    line-break: loose;
 }

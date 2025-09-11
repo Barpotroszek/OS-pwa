@@ -72,8 +72,12 @@ export default function SettingsNav({
         </div>
         <div>Rozmiar tekstu</div>
         <div className="items-row">
-          <button className="square" onClick={Settings.decreaseTextSize}>-</button>
-          <button className="square" onClick={Settings.increaseTextSize}>+</button>
+          <button className="square" onClick={Settings.decreaseTextSize}>
+            -
+          </button>
+          <button className="square" onClick={Settings.increaseTextSize}>
+            +
+          </button>
         </div>
       </div>
       <br />
@@ -85,10 +89,14 @@ export default function SettingsNav({
 function RepertoireView({ hideNav }: { hideNav: callbackWithoutArgument }) {
   const repertoire = useRepertoire();
   const songContext = useContext(SongContext);
-  const displayPrompt = () => {
-    hideNav();
-    repertoire.displayPrompt();
-  };
+  const displayAddSongPrompt = () => {
+      hideNav();
+      repertoire.displayPrompt();
+    },
+    displayShareLinkPrompt = () => {
+      hideNav();
+      repertoire.displayShareLinkPrompt();
+    };
 
   const chooseSongCallback: callbackWithNumber = (id) => {
     hideNav();
@@ -118,9 +126,14 @@ function RepertoireView({ hideNav }: { hideNav: callbackWithoutArgument }) {
         ))}
 
         <div className="cols-2 mg-top-1">
-          <button disabled={buttonDisabled} onClick={displayPrompt}>
+          <button disabled={buttonDisabled} onClick={displayAddSongPrompt}>
             Dodaj tą piosenkę
           </button>
+
+          <button className="mg-top-1" onClick={displayShareLinkPrompt}>
+            Udostępnij repertuar
+          </button>
+
           <button className="outline mg-top-1" onClick={clearList}>
             Wyczyść listę
           </button>
@@ -136,7 +149,7 @@ function RepertoireElem({
   chooseSongCallback,
 }: {
   target: string;
-  songID: number | undefined;
+  songID: number;
   chooseSongCallback: callbackWithNumber;
 }) {
   const placeholder = "_____";
@@ -144,7 +157,7 @@ function RepertoireElem({
   return (
     <>
       <div>{target}</div>
-      {songID !== undefined ? (
+      {songID > 0 ? (
         <button
           className="song-item"
           onClick={() => chooseSongCallback(songID)}

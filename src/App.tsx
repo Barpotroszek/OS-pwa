@@ -14,8 +14,11 @@ import CurrentSongView from "./view/CurrentSongView";
 import Header from "./UI-components/header";
 import Settings from "./infrastructure/settings";
 import SettingsNav from "./UI-components/SettingsNav";
-import RepertoireSongPrompt from "./UI-components/RepertoireSongPrompt";
+import RepertoireSongPrompt from "./UI-components/prompts/RepertoireSongPrompt";
 import { SongContext } from "./contexts/SongContext";
+import ShareRepertoirePrompt from "./UI-components/prompts/ShareRepertoirePrompt";
+import ImportRepertoirePrompt from "./UI-components/prompts/ImportRepertoirePrompt";
+import { useRepertoire } from "./hooks/useRepertoire";
 
 function App() {
   const reader = new MyFileReader(),
@@ -23,7 +26,8 @@ function App() {
     songListModel = useRef(new SongListVM(songListRepo)).current,
     currentSongRepo = useRef(new CurrentSong(reader)).current,
     categoriesNavRef = useRef<HTMLElement>(null),
-    settingsNavRef = useRef<HTMLElement>(null);
+    settingsNavRef = useRef<HTMLElement>(null),
+    repertoire = useRepertoire();
 
   const [currentSongID, updateCurrentSong] = useState<number | undefined>();
 
@@ -31,14 +35,23 @@ function App() {
 
   // URL Parser - żeby sprawdzić co ma wyświetlić
   useEffect(() => {
-    const searchParams = new URL(window.location.href).searchParams,
-      id = searchParams.get("id"),
-      tag = searchParams.get("tag");
+    const id = URLManager.getSearchParam("id"),
+      tag = URLManager.getSearchParam("tag"),
+      r_query = new URL(window.location.href).searchParams.get("repertoire");
 
-    if (tag != null) songListModel.setTag(Number(tag));
+    URLManager.log();
+
+    if (r_query !== null) {
+      console.log("REPERTOIRE!!!", { r_query });
+      repertoire.import(r_query!);
+      repertoire.displayImportedPrompt();
+      URLManager.deleteSearchParam("repertoire");
+    }
+
+    if (tag !== null) songListModel.setTag(Number(tag));
 
     songListRepo.loadingProcess.then(() => {
-      if (id != null) updateCurrentSong(Number(id));
+      if (id !== null) updateCurrentSong(Number(id));
       else updateCurrentSong(undefined);
     });
     songListModel.fetchSongsFromRepo();
@@ -71,7 +84,7 @@ function App() {
     songListModel.fetchSongsFromRepo();
   };
 
-  window.onpopstate = songExitCallback; 
+  window.onpopstate = songExitCallback;
   let MainBlock: React.ReactElement;
 
   if (currentSongID !== undefined && currentSongID > 0) {
@@ -97,18 +110,25 @@ function App() {
         categoriesNavRef={categoriesNavRef}
         settingsNavRef={settingsNavRef}
       />
-      <SongContext.Provider value={{setNewSong: songChosenCallback, isSongChosen: ( currentSongID !== undefined && currentSongID > 0 )}} >
-      <div id="main-wrapper" className="flex-center max-width">
-        <div className="hidding-wrapper">
-          <CategoriesNav
-            reference={categoriesNavRef}
-            onTagChosen={tagChosenCallback}
-          />
-          <SettingsNav reference={settingsNavRef} />
-          <RepertoireSongPrompt />
+      <SongContext.Provider
+        value={{
+          setNewSong: songChosenCallback,
+          isSongChosen: currentSongID !== undefined && currentSongID > 0,
+        }}
+      >
+        <div id="main-wrapper" className="flex-center max-width">
+          <div className="hidding-wrapper">
+            <CategoriesNav
+              reference={categoriesNavRef}
+              onTagChosen={tagChosenCallback}
+            />
+            <SettingsNav reference={settingsNavRef} />
+            <RepertoireSongPrompt />
+            <ShareRepertoirePrompt />
+            <ImportRepertoirePrompt />
+          </div>
+          {MainBlock}
         </div>
-        {MainBlock}
-      </div>
       </SongContext.Provider>
     </>
   );
