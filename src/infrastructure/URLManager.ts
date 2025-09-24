@@ -1,5 +1,5 @@
 class URLManager {
-    private homepage = "/OS-pwa";
+    private homepage = "/OS-pwa/";
     private location = new URL(window.location.href)
 
     public pushState(url: string, refresh: boolean = false) {
@@ -28,7 +28,7 @@ class URLManager {
     }
 
     public createURLwithSearchParam(key: string, value: string){
-        console.log("[URLManager] Creating new URL")
+     //  console.log("[URLManager] Creating new URL")
         const loc = new URL(this.location);
         loc.search = "";
         loc.searchParams.set(key, value);
@@ -36,7 +36,7 @@ class URLManager {
     }
 
     public log(){
-        console.log("[URLManager]", {location: this.location})
+     //  console.log("[URLManager]", {location: this.location})
     }
 }
 

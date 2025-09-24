@@ -35,7 +35,7 @@ export default class SongListVM {
     /** Dodawanie tagów wyszukania, alias dla Filter.addTag() */
     public addTag(value: number) {
         this.filter.addTag(value)
-        console.log("Tag has been added")
+     //  console.log("Tag has been added")
     }
 
     /** Ustawianie tagu jako filtr, nadpisuje pozostałe tagi, alias dla Filter.setTag() */

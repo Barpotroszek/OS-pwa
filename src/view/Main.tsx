@@ -35,7 +35,7 @@ export function MainBlock({
 
   if (currentSongID !== undefined && currentSongID > 0) {
     currentSongRepo.setNewSong(songListRepo.getSong(currentSongID));
-    console.log({ currentSongID });
+ //  console.log({ currentSongID });
     return (
       <main id="songView">
         <CurrentSongView repo={currentSongRepo} />

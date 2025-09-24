@@ -9,7 +9,7 @@ export default class MyFileReader {
   public createRequest(url: String | Number = ""): Promise<Response>{
     // console.debug("[MyFileReader] Createing request\nReader:", {url})
     this.filePath = URLManager.relativePath(STORAGE_DIR + (url == null ? STORAGE_FILE: url));
-    
+    console.debug("[MyFileReader] Fetching:", {url})
     return fetch(this.filePath)
   }
 
@@ -20,6 +20,6 @@ export default class MyFileReader {
   }
 
   readToText(filepath: String): Promise<string>{
-    return this.createRequest(filepath).then((data) => data.text())
+    return this.createRequest(filepath).then((data) => data.text()).catch(e=>"Something went wrong...")
   }
 }

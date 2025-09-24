@@ -1,7 +1,7 @@
 {
   "name": "os-pwa",
   "version": "0.1.2",
-  "homepage": "https://barpotroszek.github.io/OS-pwa",
+  "homepage": "https://barpotroszek.github.io/OS-pwa/",
   "private": true,
   "dependencies": {
     "@types/node": "^20.12.12",

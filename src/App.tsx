@@ -42,7 +42,7 @@ function App() {
     URLManager.log();
 
     if (r_query !== null) {
-      console.log("REPERTOIRE!!!", { r_query });
+   //  console.log("REPERTOIRE!!!", { r_query });
       repertoire.import(r_query!);
       repertoire.displayImportedPrompt();
       URLManager.deleteSearchParam("repertoire");
@@ -89,7 +89,7 @@ function App() {
 
   if (currentSongID !== undefined && currentSongID > 0) {
     currentSongRepo.setNewSong(songListRepo.getSong(currentSongID));
-    console.log({ currentSongID });
+ //  console.log({ currentSongID });
     MainBlock = (
       <main id="songView">
         <CurrentSongView repo={currentSongRepo} />

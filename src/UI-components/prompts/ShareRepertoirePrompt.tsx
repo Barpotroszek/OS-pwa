@@ -28,7 +28,7 @@ export default function ShareRepertoirePrompt() {
     <div className="prompt grid-column" ref={ref}>
       <h3 className="text-center primary-underline">Udostępnij repertuar</h3>
       <p>Link do repertuaru:</p>
-      <input type="text" value={href} inputMode="none" />
+      <input type="text" defaultValue={href} inputMode="none" readOnly />
       <div className="flex-column">
         <button onClick={copyLink}>Kopiuj link</button>
         <button className="outline" onClick={hidePrompt}>

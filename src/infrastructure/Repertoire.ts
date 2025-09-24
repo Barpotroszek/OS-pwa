@@ -11,7 +11,7 @@ class Repertoire {
     public _displayImportedPrompt: callbackWithoutArgument | null = null;
     private _onUpdate: callbackWithoutArgument | undefined;
     public setAddSongButtonDisabled: callbackWithBoolean = (t) => {
-        console.log("[Repertoire] Adding btn disabler not assigned")
+     //  console.log("[Repertoire] Adding btn disabler not assigned")
     }
 
     public set onUpdate(callback: () => void) {
@@ -37,7 +37,7 @@ class Repertoire {
     }
 
     constructor(songs?: number[]) {
-        console.log("[Repertoire] New construction")
+     //  console.log("[Repertoire] New construction")
         let found;
         repertoireTargets.forEach((name) => {
             found = localStorage.getItem(name);
@@ -58,7 +58,7 @@ class Repertoire {
         this.data.set(target, songID);
         if (this._onUpdate !== undefined)
             this._onUpdate();
-        console.log(this.data)
+     //  console.log(this.data)
     }
 
     public getSong(target: RepertoireTarget | string): number {

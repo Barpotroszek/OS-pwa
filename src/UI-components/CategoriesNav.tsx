@@ -13,7 +13,7 @@ export default function CategoriesNav({
   const tableRowBuilder = (v: any) => {
     return (
       <tr key={v[0]} onClick={() => onTagChosen(Number(v[0]))}>
-        {v[1]}
+          <td>{v[1]}</td>
       </tr>
     );
   };

@@ -23,7 +23,7 @@ export default function SongListView({
   };
 
   let myBody: () => React.JSX.Element;
-  if (list.length > 0) myBody = () => ItemsListFabric(list);
+  if (list.length > 0) myBody = () => <ItemsListFabric items={list} />;
   else myBody = () => SthWentWrong();
 
   return (
@@ -55,7 +55,7 @@ function SthWentWrong() {
  * Odpowiada za stworzenie elementów do tablicy na podstawie podanej listy
  * @param items lista pieśni do umieszczenia w tablicy
  */
-function ItemsListFabric(items: Song[]) {
+function ItemsListFabric({items}: {items: Song[]}) {
   const songContext = useContext(SongContext);
   return (
     <table id="titlesList">

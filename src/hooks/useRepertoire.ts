@@ -5,7 +5,7 @@ export function useRepertoire() {
     const [t, forceUpdate] = useState<number>(0);
     useEffect(() => {
         repertoire.onUpdate = () => {
-            console.log("[useRepertoire] setting onUpdate")
+         //  console.log("[useRepertoire] setting onUpdate")
             forceUpdate(t + 1)
         };
     }, [])

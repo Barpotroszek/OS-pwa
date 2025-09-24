@@ -1,15 +1,14 @@
- export const relativeUrl = (target: string) => {
+export const relativeUrl = (target: string) => {
   return window.homepage + target;
 };
 
 const registerSW = (path: string) => {
-  console.log("[SETUP] Registration")
+  console.log("[SETUP] Registration", {homepage: window.homepage, path})
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register(relativeUrl(path), {
       scope: window.homepage
     }).then(function (registration) {
-      console.log("Im in registration")
       if (registration.installing)
         console.debug("[SETUP] Service Worker installing");
       else if (registration.waiting)
@@ -18,12 +17,12 @@ const registerSW = (path: string) => {
         console.debug("[SETUP] Service Worker active :>");
 
       window.registration = registration;
-      console.log({ registration })
+   //  console.log({ registration })
       // console.debug("[SW] Service Worker Registered", registration);
 
       registration.onupdatefound = () => {
         // Check & notify if app needs to be update
-        console.log("[SW] UPDATE: ", registration);
+     //  console.log("[SW] UPDATE: ", registration);
         const installer = registration.installing;
         if (installer)
           installer.onstatechange = () => {
@@ -53,7 +52,7 @@ const setupDarkModeListener = () => {
   window.addEventListener("message", (e) => {
     const data = e.data;
     if (data.darkMode === undefined) return;
-    console.log(data);
+    // console.log(data);
     let theme = data.darkMode ? "dark" : "light"
     document.documentElement.setAttribute(
       "data-theme", theme
@@ -72,18 +71,11 @@ export const enableCaching = () => {
 export default function init() {
   window.homepage = "/OS-pwa/";
   console.log("[INIT] HomePage:", window.homepage)
-  setupDarkModeListener()
+  // setupDarkModeListener()
 
-  registerSW("sw.js");
+  // registerSW("sw.js");
 
-  let theme = window.localStorage.getItem("theme"), mode;
-  if (!theme)
-    mode = window.matchMedia("(prefers-color-scheme: dark )").matches;
-  else
-    mode = theme === "dark";
-  window.postMessage({ darkMode: mode });
-
-  return;  
+  return;
   // TODO: Not working - repair
   // inform SW if PWA is installed
   if (navigator.serviceWorker.controller !== undefined && navigator.serviceWorker.controller !== null)
@@ -97,5 +89,5 @@ export default function init() {
 //   alert("PopSTate")
 //   const newUrl = (window.location),
 //     trimmed = window.homepage.replace(/\/$/, '');
-//   console.log(newUrl.href, newUrl.href.includes(trimmed))
+////  console.log(newUrl.href, newUrl.href.includes(trimmed))
 // })

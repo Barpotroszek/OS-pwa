@@ -9,7 +9,7 @@ export default class Song {
 
     constructor(id: number, title: string, tags?: number, file?: string) {
         if(Number.isNaN(id))
-            console.log(id, title);
+         //  console.log(id, title);
         this._id = id;
         this._title = title;
         this._tags = tags ? tags : 0;

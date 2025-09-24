@@ -3,7 +3,7 @@ import { pushState } from "./helpers";
 
 export function BackButton({ cb }: { cb: any }) {
   const callback = () => {
-    console.log("STATE:", window.history.state);
+ //  console.log("STATE:", window.history.state);
     if (cb) {
       cb();
       // return
