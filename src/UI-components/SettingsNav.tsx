@@ -16,6 +16,8 @@ import {
   callbackWithNumber,
   callbackWithoutArgument,
 } from "src/infrastructure/types/global";
+import { STORAGE_DIR, STORAGE_FILE } from "src/infrastructure/constants";
+import manager from "src/infrastructure/URLManager";
 
 interface SettingsNavContextInterface {
   setNewSong: callbackWithNumber;
@@ -39,10 +41,11 @@ export default function SettingsNav({
   };
 
   const changeTheme = (v: boolean) => {
-    console.log({ v, isDarkTheme });
+    //  console.log({ v, isDarkTheme });
     Settings.setTheme(v);
     _changeTheme(v);
   };
+
 
   useEffect(() => {
     // Powinienem to zrobić w settings, ale nie chce to działać jak powinno, stąd jest tak
@@ -82,7 +85,52 @@ export default function SettingsNav({
       </div>
       <br />
       <RepertoireView hideNav={hideNav} />
+      <br />
+      <SpecialActionButton />
     </nav>
+  );
+}
+
+function SpecialActionButton() {
+  /** IDK how to name it. 
+  PWA not installed - display "Install" button
+  PWA installed - display "Download All button"
+  */
+
+  const [prompt, setPrompt] = useState<any>(null);
+  const isInstalled = window.matchMedia("(display-mode: standalone)").matches;
+
+  useEffect(()=>{
+    window.addEventListener("beforeinstallprompt", (e)=>{
+      e.preventDefault();
+      setPrompt(e);
+    })
+  }, [])
+  const install = () => {
+    if(prompt)
+      prompt.prompt()
+  };
+
+  const downloadAllSongs = () => {
+    // TODO: Dodać tą opcję i w SW żeby pobierało dopiero po zainstalowaniu
+    window.registration.active?.postMessage({
+      downloadAll: true,
+      url: manager.relativePath(STORAGE_DIR + STORAGE_FILE),
+    });
+  };
+
+
+  if (isInstalled)
+    return (
+      <div className="bottom">
+        <button onClick={downloadAllSongs}>Pobierz wszystkie pieśni</button>
+      </div>
+    );
+
+  return (
+    <div className="bottom" hidden={prompt !== null}>
+      <button onClick={install}>Zainstaluj śpiewnik</button>
+    </div>
   );
 }
 
@@ -113,12 +161,11 @@ function RepertoireView({ hideNav }: { hideNav: callbackWithoutArgument }) {
   const buttonDisabled = !songContext?.isSongChosen;
   return (
     <>
-      <h3 className="text-center primary-underline" key={"repertoire-title"}>
-        Repertuar
-      </h3>
+      <h3 className="text-center primary-underline">Repertuar</h3>
       <div className="container" key={key} data-key={key}>
         {repertoireTargets.map((target) => (
           <RepertoireElem
+            key={"repertoire-elem-" + target.replace(" ", "-").toLowerCase()}
             target={target}
             songID={repertoire.getSong(target)}
             chooseSongCallback={chooseSongCallback}
@@ -153,7 +200,7 @@ function RepertoireElem({
   chooseSongCallback: callbackWithNumber;
 }) {
   const placeholder = "_____";
-  console.log("[SettingsNav]", target, songID);
+  // console.log("[SettingsNav]", target, songID);
   return (
     <>
       <div>{target}</div>

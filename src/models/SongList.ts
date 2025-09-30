@@ -1,3 +1,4 @@
+import {  STORAGE_FILE } from "src/infrastructure/constants";
 import MyFileReader from "../MyFileReader";
 import Filter from "./Filter";
 import Song from "./Song";
@@ -14,10 +15,11 @@ export default class SongList {
   }
 
   private _fetchList(): Promise<void | Song[]> {
-    return this.reader.readToJSON("storage.json").then(data => {
-      // console.log(data)
+    return this.reader.readToJSON(STORAGE_FILE).then(data => {
+      // console.log("[SongList] Song Data:", data)
 
       Object.entries(data.titles).forEach(([n, v]) => { 
+        // console.log("[SongList] Data:", Number(n),v)
         this.mainList.push(new Song(Number(n), v as string, data.tags[n]))
       })
     }).catch(e => console.debug("[SongList] Problem z ładowaniem"))

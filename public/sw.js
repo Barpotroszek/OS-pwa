@@ -49,15 +49,14 @@ function getResponse(url, cachingFirst = false) {
   return new Promise(async (res, rej) => {
     if (cachingFirst) {
       let r = await getCache(url);
-      if (r) return res(r);
+      if (r.ok) return res(r);
       // console.log("[SW] nothing found in cache... making fetch")
       try {
         r = await makeFetch(url);
+        if (r.ok) return res(r);
         // console.log("[SW] nope, not working...")
-        if (r) return res(r);
       } catch (error) {
-      }
-      finally{
+      } finally {
         return new Response("Coś poszło nie tak...", { status: 404 });
       }
     } else {
@@ -83,14 +82,12 @@ self.addEventListener("activate", (event) => {
   // console.log("[SW] Active!!!", event);
 });
 
-
 self.addEventListener("install", (event) => {
   // console.log("[SW] INSTALL ", version);
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       // console.log("[SW] Caching resources");
       return cache.addAll(files).finally(() => {
-        caching = true;
         // console.log("[SW] All resources have been fetched and cached.");
       });
     })
@@ -100,16 +97,16 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("message", (ev) => {
   // To get if PWA is installed
-  // console.log("[SW] MESSAGE");
-  // console.log("[SW]", ev);
-  const data = ev.data;
-  if (data.caching) {
-    caching = true;
-    caches.open(CACHE_NAME).then((cache) => {
-      files.forEach((file) => {
-        cache.add(file);
+  console.log("[SW] MESSAGE");
+  console.log("[SW]", ev);
+  caches
+    .open(CACHE_NAME)
+    .then(async (cache) => {
+      console.log(ev.data.url);
+      const data = await fetch(ev.data.url);
+      data.json().then((t) => {
+        Object.keys(t.titles).forEach((id) => cache.add(`store/${id}.md`));
       });
-    });
-  }
-  if (data.caching === false) data.caching = false;
+    })
+    .catch((e) => console.log("[SW] Failed to open CACHE:", e));
 });

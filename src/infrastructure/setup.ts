@@ -17,12 +17,10 @@ const registerSW = (path: string) => {
         console.debug("[SETUP] Service Worker active :>");
 
       window.registration = registration;
-   //  console.log({ registration })
-      // console.debug("[SW] Service Worker Registered", registration);
+      
 
       registration.onupdatefound = () => {
         // Check & notify if app needs to be update
-     //  console.log("[SW] UPDATE: ", registration);
         const installer = registration.installing;
         if (installer)
           installer.onstatechange = () => {
@@ -61,33 +59,15 @@ const setupDarkModeListener = () => {
   });
 }
 
-export const enableCaching = () => {
-  // Wyślij mu polecenie, żeby wszystko co ma już po prostu cachował
-  // navigator.serviceWorker.controller!.postMessage({ caching: window.matchMedia("(display-mode: standalone)").matches })
-  if (window.registration.active !== undefined && window.registration.active !== null)
-    window.registration.active.postMessage({ caching: true })
-}
-
 export default function init() {
   window.homepage = "/OS-pwa/";
   console.log("[INIT] HomePage:", window.homepage)
   // setupDarkModeListener()
 
-  // registerSW("sw.js");
+  // If PWA is installed, then register the SW and download all songs(automaticly)
+  if(window.matchMedia("(display-mode: standalone").matches)
+    registerSW("sw.js");
 
   return;
-  // TODO: Not working - repair
-  // inform SW if PWA is installed
-  if (navigator.serviceWorker.controller !== undefined && navigator.serviceWorker.controller !== null)
-    enableCaching()
-  else
-    navigator.serviceWorker.oncontrollerchange = enableCaching;
 
 }
-
-// window.addEventListener("popstate", e => {
-//   alert("PopSTate")
-//   const newUrl = (window.location),
-//     trimmed = window.homepage.replace(/\/$/, '');
-////  console.log(newUrl.href, newUrl.href.includes(trimmed))
-// })

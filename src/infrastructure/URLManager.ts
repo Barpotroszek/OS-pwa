@@ -23,6 +23,8 @@ class URLManager {
     }
 
     public relativePath(url: string): string {
+        if(!url.startsWith('/'))
+            url = '/' + url;
         let loc = this.location.pathname.replace(/\/$/, '') + url;
         return loc
     }

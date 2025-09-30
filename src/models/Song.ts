@@ -8,8 +8,9 @@ export default class Song {
     private readonly reader: MyFileReader | undefined;
 
     constructor(id: number, title: string, tags?: number, file?: string) {
-        if(Number.isNaN(id))
-         //  console.log(id, title);
+        if (Number.isNaN(id)) {
+            console.log(id, title);
+        }
         this._id = id;
         this._title = title;
         this._tags = tags ? tags : 0;
