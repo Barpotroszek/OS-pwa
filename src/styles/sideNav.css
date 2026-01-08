@@ -29,23 +29,25 @@ nav#settings {
 }
 
 nav .bottom {
-    margin-top: auto;
-    margin-bottom: 1em;
+    /* top: auto, sides: auto, bottom 1em */
+    margin: auto auto 1em auto;
 }
 
 .hidding-wrapper {
     z-index: 3;
+    position: fixed;
     display: grid;
     width: 100%;
-    top: 0;
+    /* Gap for header*/
+    height: 94vh;
+    top: 6vh;
     left: 0;
-    height: 100%;
-    position: absolute;
     padding: 0;
     transition: .2s all ease-in-out;
     backdrop-filter: none;
     z-index: 0;
 }
+
 
 .hidding-wrapper:has(.active) {
     backdrop-filter: brightness(.6);
@@ -56,6 +58,7 @@ nav .bottom {
 nav.active {
     transform: translate(0) !important;
     filter: none;
+    position: fixed;
 }
 
 nav b {

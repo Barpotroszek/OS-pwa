@@ -1,7 +1,6 @@
 import React, {
   RefObject,
   useContext,
-  createContext,
   useEffect,
   useState,
 } from "react";
@@ -11,30 +10,22 @@ import "../styles/switch.css";
 import Settings from "src/infrastructure/settings";
 import { repertoireTargets } from "src/infrastructure/Repertoire";
 import { useRepertoire } from "src/hooks/useRepertoire";
-import { SongContext } from "src/contexts/SongContext";
 import {
   callbackWithNumber,
   callbackWithoutArgument,
 } from "src/infrastructure/types/global";
 import { STORAGE_DIR, STORAGE_FILE } from "src/infrastructure/constants";
 import manager from "src/infrastructure/URLManager";
-
-interface SettingsNavContextInterface {
-  setNewSong: callbackWithNumber;
-  hideNav: callbackWithoutArgument;
-}
-
-const settingsNavContext = createContext<SettingsNavContextInterface | null>(
-  null
-);
+import navigationCtx from "src/contexts/NavigationContext";
+import Navigation from "src/viewModels/Navigation";
 
 export default function SettingsNav({
   reference,
 }: {
   reference: RefObject<HTMLElement>;
 }) {
-  const [isDarkTheme, _changeTheme] = useState(Settings.isDarkMode),
-    songContext = useContext(SongContext);
+  const [isDarkTheme, _changeTheme] = useState(Settings.isDarkMode);
+  // navigation = useContext(SongContext);
 
   const hideNav: callbackWithoutArgument = () => {
     reference.current?.classList.remove("active");
@@ -45,7 +36,6 @@ export default function SettingsNav({
     Settings.setTheme(v);
     _changeTheme(v);
   };
-
 
   useEffect(() => {
     // Powinienem to zrobić w settings, ale nie chce to działać jak powinno, stąd jest tak
@@ -100,25 +90,23 @@ function SpecialActionButton() {
   const [prompt, setPrompt] = useState<any>(null);
   const isInstalled = window.matchMedia("(display-mode: standalone)").matches;
 
-  useEffect(()=>{
-    window.addEventListener("beforeinstallprompt", (e)=>{
+  useEffect(() => {
+    window.addEventListener("beforeinstallprompt", (e) => {
       e.preventDefault();
       setPrompt(e);
-    })
-  }, [])
+    });
+  }, []);
   const install = () => {
-    if(prompt)
-      prompt.prompt()
+    if (prompt) prompt.prompt();
   };
 
   const downloadAllSongs = () => {
-    // TODO: Dodać tą opcję i w SW żeby pobierało dopiero po zainstalowaniu
+    // // TODO: Dodać tą opcję i w SW żeby pobierało dopiero po zainstalowaniu
     window.registration.active?.postMessage({
       downloadAll: true,
       url: manager.relativePath(STORAGE_DIR + STORAGE_FILE),
     });
   };
-
 
   if (isInstalled)
     return (
@@ -136,7 +124,8 @@ function SpecialActionButton() {
 
 function RepertoireView({ hideNav }: { hideNav: callbackWithoutArgument }) {
   const repertoire = useRepertoire();
-  const songContext = useContext(SongContext);
+  const navigation = useContext(navigationCtx)!;
+
   const displayAddSongPrompt = () => {
       hideNav();
       repertoire.displayPrompt();
@@ -146,9 +135,9 @@ function RepertoireView({ hideNav }: { hideNav: callbackWithoutArgument }) {
       repertoire.displayShareLinkPrompt();
     };
 
-  const chooseSongCallback: callbackWithNumber = (id) => {
+  const chooseSongCallback: callbackWithNumber<void> = (id) => {
     hideNav();
-    songContext?.setNewSong(id);
+    navigation.setChosenSong(id);
   };
 
   const clearList: callbackWithoutArgument = () => {
@@ -158,7 +147,6 @@ function RepertoireView({ hideNav }: { hideNav: callbackWithoutArgument }) {
 
   // console.log("[RepertoireView] reRender", repertoire);
   let key = "repertoire-" + Date.now();
-  const buttonDisabled = !songContext?.isSongChosen;
   return (
     <>
       <h3 className="text-center primary-underline">Repertuar</h3>
@@ -173,9 +161,7 @@ function RepertoireView({ hideNav }: { hideNav: callbackWithoutArgument }) {
         ))}
 
         <div className="cols-2 mg-top-1">
-          <button disabled={buttonDisabled} onClick={displayAddSongPrompt}>
-            Dodaj tą piosenkę
-          </button>
+          <AddSongButton callback={displayAddSongPrompt} nav={navigation} />
 
           <button className="mg-top-1" onClick={displayShareLinkPrompt}>
             Udostępnij repertuar
@@ -190,6 +176,28 @@ function RepertoireView({ hideNav }: { hideNav: callbackWithoutArgument }) {
   );
 }
 
+function AddSongButton({
+  callback,
+  nav,
+}: {
+  callback: callbackWithoutArgument;
+  nav: Navigation;
+}) {
+  const [state, updateState] = useState(nav.isSongChosen);
+  nav.onCurrentSongUpdate = (id) => {
+    console.log(
+      "[AddSongButton] callback, state: ",
+      id === undefined || id === 0
+    );
+    updateState(id === undefined || id === 0);
+  };
+  return (
+    <button disabled={state} onClick={callback}>
+      Dodaj tą piosenkę
+    </button>
+  );
+}
+
 function RepertoireElem({
   target,
   songID,
@@ -197,7 +205,7 @@ function RepertoireElem({
 }: {
   target: string;
   songID: number;
-  chooseSongCallback: callbackWithNumber;
+  chooseSongCallback: callbackWithNumber<void>;
 }) {
   const placeholder = "_____";
   // console.log("[SettingsNav]", target, songID);

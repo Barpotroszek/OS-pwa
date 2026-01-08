@@ -3,6 +3,6 @@ declare global {
 }
 
 declare module "*.css";
-export type callbackWithNumber = (value: number) => void;
+export type callbackWithNumber<T> = (value: number) => T;
 export type callbackWithBoolean = (value: boolean) => void;
 export type callbackWithoutArgument = () => void

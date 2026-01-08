@@ -7,15 +7,17 @@ export default class SongListVM {
     private currentList: Song[] = [];
     private filter: Filter;
     private repo: SongList;
-    private _uiState: LoadingStates = LoadingStates.LOADING
+    private _uiState: LoadingStates = LoadingStates.NOT_READY
     private _onLoadEnd: (() => void) = () => { };
     // private _uiState = LoadingStates.NOT_READY
 
     public set onLoadEnd(callback: (() => void)) {
         this._onLoadEnd = callback;
-        if (this._uiState === LoadingStates.FINISHED){
+        if (this._uiState === LoadingStates.FINISHED) {
+            console.log("shit, they were faster")
             callback();
         }
+        console.log("[SongListVM] Set callback :> ", this._onLoadEnd)
     }
 
     public get uiState(): LoadingStates {
@@ -28,18 +30,17 @@ export default class SongListVM {
     constructor(sharedSongRepo: SongList) {
         this.repo = sharedSongRepo;
         this.filter = new Filter();
-        // this.fetchSongsFromRepo();
-        // console.log("Filter in constructor:", this.filter)
+        console.log("[SongListVM] Constructor")
     }
 
     /** Dodawanie tagów wyszukania, alias dla Filter.addTag() */
     public addTag(value: number) {
         this.filter.addTag(value)
-     //  console.log("Tag has been added")
+        //  console.log("Tag has been added")
     }
 
     /** Ustawianie tagu jako filtr, nadpisuje pozostałe tagi, alias dla Filter.setTag() */
-    public setTag(value: number){
+    public setTag(value: number) {
         this.filter.setTag(value);
     }
 
@@ -48,7 +49,7 @@ export default class SongListVM {
         this.filter.removeTag(value)
     }
 
-    public clearTags(){
+    public clearTags() {
         this.filter.clearTags();
     }
 
@@ -68,6 +69,7 @@ export default class SongListVM {
      */
     public fetchSongsFromRepo() {
         // console.log("Filter in fetch:", this.filter)
+        this._uiState = LoadingStates.LOADING
         this.repo.fetchList(this.filter).then(list => {
             this.currentList = list;
             this._uiState = LoadingStates.FINISHED;

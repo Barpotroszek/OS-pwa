@@ -1,44 +1,38 @@
 import React, { useContext, useEffect, useState } from "react";
 import "../styles/table.css";
 import "../styles/searchbar.css";
-import SongBook from "../viewModels/SongListVM";
 import Song from "../models/Song";
-import { SongContext } from "src/contexts/SongContext";
+import navigationCtx from "src/contexts/NavigationContext";
+import { LoadingStates } from "src/viewModels/LoadingStates";
 
-export default function SongListView({
-  viewModel,
-}: {
-  viewModel: SongBook;
-}) {
-  const [enteredInput, updateInput] = useState("");
-  const [list, updateList] = useState(viewModel.getList());
+export default function SongListView() {
+  const navigation = useContext(navigationCtx)!,
+    songListVM = navigation.songList,
+    [list, updateList] = useState(songListVM.getList());
 
   useEffect(() => {
-    viewModel.onLoadEnd = () => updateList(viewModel.getList());
+    navigation.onListLoaded = () => {
+      updateList(songListVM.getList())
+    };
+    songListVM.fetchSongsFromRepo();
   }, []);
 
-  const searchButtonAction = () => {
-    viewModel.setSearchQuery(enteredInput);
-    viewModel.fetchSongsFromRepo();
+  const searchButtonAction = (txt: string) => {
+    songListVM.setSearchQuery(txt);
+    songListVM.fetchSongsFromRepo();
   };
 
   let myBody: () => React.JSX.Element;
-  if (list.length > 0) myBody = () => <ItemsListFabric items={list} />;
+  if (songListVM.uiState !== LoadingStates.FINISHED)
+    myBody = () => <i>Ładowanie pieśni...</i>;
+  else if (list.length > 0) myBody = () => <ItemsListFabric items={list} />;
   else myBody = () => SthWentWrong();
+  console.log("[SongListView] Rerendering list :>");
 
   return (
     <>
       <h2 className="primary-underline">Wybierz pieśń z listy:</h2>
-      <div id="searchbar">
-        <input
-          type="text"
-          placeholder="Wyszukiwarka"
-          onKeyDown={(e) => (e.key === "Enter" ? searchButtonAction() : null)}
-          onInput={(e: any) => updateInput(e.target.value)}
-          value={enteredInput}
-        />
-        <button onClick={searchButtonAction}>Szukaj</button>
-      </div>
+      <Searchbar onSubmit={searchButtonAction} />
       {myBody()}
     </>
   );
@@ -52,16 +46,44 @@ function SthWentWrong() {
 }
 
 /**
+ * Wyszukiwarka po tekście
+ * @param onSubmit obsługa "zatwierdzenia" tekstu
+ * @returns
+ */
+function Searchbar({ onSubmit }: { onSubmit: (txt: string) => void }) {
+  const [enteredInput, updateInput] = useState("");
+  return (
+    <div id="searchbar">
+      <input
+        type="text"
+        placeholder="Wyszukiwarka"
+        onKeyDown={(e) => (e.key === "Enter" ? onSubmit(enteredInput) : console.log)}
+        onSubmit={()=> onSubmit(enteredInput)}
+        onInput={(e: any) => updateInput(e.target.value)}
+        value={enteredInput}
+      />
+      <button onClick={() => onSubmit(enteredInput)}>Szukaj</button>
+    </div>
+  );
+}
+
+/**
  * Odpowiada za stworzenie elementów do tablicy na podstawie podanej listy
  * @param items lista pieśni do umieszczenia w tablicy
  */
-function ItemsListFabric({items}: {items: Song[]}) {
-  const songContext = useContext(SongContext);
+function ItemsListFabric({ items }: { items: Song[] }) {
+  const navigation = useContext(navigationCtx)!;
   return (
     <table id="titlesList">
       <tbody className="hoverable">
         {items.map((item, _) => {
-          return <SongTitleItem item={item} key={item.id} cb={songContext?.setNewSong} />;
+          return (
+            <SongTitleItem
+              item={item}
+              key={item.id}
+              cb={(id: number) => navigation.setChosenSong(id)}
+            />
+          );
         })}
       </tbody>
     </table>

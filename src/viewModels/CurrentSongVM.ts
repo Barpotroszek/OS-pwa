@@ -9,11 +9,14 @@ export default class CurrentSong {
     private finished: boolean = true;
     private loadingProcess: Promise<string> | undefined
 
+    public get isChosen() {
+        return this.songRepo === undefined;
+    };
+
     public set onLoadEnd(v: (text: string) => void) {
         this._onLoadEnd = v;
         if (this.finished) {
             // Jakby nie zdązył ustawić listenera, a skończył już prace
-            // console.log("[CurrentSong] Shit, they were faster")
             v(this.content)
         }
     }

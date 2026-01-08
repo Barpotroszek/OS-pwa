@@ -1,35 +1,29 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import URLManager from "./infrastructure/URLManager";
 import "./styles/main.css";
 import "./styles/songView.css";
 import MyFileReader from "./MyFileReader";
 import SongList from "./models/SongList";
-import SongListVM from "./viewModels/SongListVM";
-import CurrentSong from "./viewModels/CurrentSongVM";
 import CategoriesNav from "./UI-components/CategoriesNav";
-import { BackButton } from "./UI-components/backButton";
-import SongListView from "./view/SongListView";
-import CurrentSongView from "./view/CurrentSongView";
 // @ts-ignore
 import Header from "./UI-components/header";
 import Settings from "./infrastructure/settings";
 import SettingsNav from "./UI-components/SettingsNav";
 import RepertoireSongPrompt from "./UI-components/prompts/RepertoireSongPrompt";
-import { SongContext } from "./contexts/SongContext";
 import ShareRepertoirePrompt from "./UI-components/prompts/ShareRepertoirePrompt";
 import ImportRepertoirePrompt from "./UI-components/prompts/ImportRepertoirePrompt";
 import { useRepertoire } from "./hooks/useRepertoire";
+import { Main } from "./view/Main";
+import Navigation from "./viewModels/Navigation";
+import NavigationContext from "./contexts/NavigationContext";
 
 function App() {
   const reader = new MyFileReader(),
     songListRepo = useRef(new SongList(reader)).current,
-    songListModel = useRef(new SongListVM(songListRepo)).current,
-    currentSongRepo = useRef(new CurrentSong(reader)).current,
     categoriesNavRef = useRef<HTMLElement>(null),
     settingsNavRef = useRef<HTMLElement>(null),
-    repertoire = useRepertoire();
-
-  const [currentSongID, updateCurrentSong] = useState<number | undefined>();
+    repertoire = useRepertoire(),
+    navigation = new Navigation(songListRepo, reader);
 
   Settings.apply();
 
@@ -42,67 +36,26 @@ function App() {
     URLManager.log();
 
     if (r_query !== null) {
-   //  console.log("REPERTOIRE!!!", { r_query });
       repertoire.import(r_query!);
       repertoire.displayImportedPrompt();
       URLManager.deleteSearchParam("repertoire");
     }
 
-    if (tag !== null) songListModel.setTag(Number(tag));
+    if (tag !== null) navigation.setTag(Number(tag));
 
     songListRepo.loadingProcess.then(() => {
-      if (id !== null) updateCurrentSong(Number(id));
-      else updateCurrentSong(undefined);
+      if (id !== null) navigation.setChosenSong(Number(id));
+      else navigation.exitSongView();
     });
-    songListModel.fetchSongsFromRepo();
   }, []);
 
-  const songChosenCallback = (id: number) => {
-    URLManager.setSearchParam("id", String(id));
-    updateCurrentSong(id);
-  };
-
-  const songExitCallback = () => {
-    URLManager.deleteSearchParam("id");
-    updateCurrentSong(0);
-  };
-
   const tagChosenCallback = (tag: number) => {
-    URLManager.setSearchParam("tag", tag.toString());
-    songListModel.setTag(tag);
-    songListModel.fetchSongsFromRepo();
-
     // @ts-ignore
     categoriesNavRef.current.classList.remove("active");
-    // Na wypadek, jakby aktualnie była wyświetlana jakaś piosenka:
-    songExitCallback();
+    navigation.setTag(tag);
   };
 
-  const listBackCallback = () => {
-    URLManager.deleteSearchParam("tag");
-    songListModel.clearTags();
-    songListModel.fetchSongsFromRepo();
-  };
-
-  window.onpopstate = songExitCallback;
-  let MainBlock: React.ReactElement;
-
-  if (currentSongID !== undefined && currentSongID > 0) {
-    currentSongRepo.setNewSong(songListRepo.getSong(currentSongID));
- //  console.log({ currentSongID });
-    MainBlock = (
-      <main id="songView">
-        <CurrentSongView repo={currentSongRepo} />
-        <BackButton cb={songExitCallback} />
-      </main>
-    );
-  } else
-    MainBlock = (
-      <main>
-        <SongListView viewModel={songListModel} />
-        <BackButton cb={listBackCallback} />
-      </main>
-    );
+  window.onpopstate = navigation.exitSongView;
 
   return (
     <>
@@ -110,12 +63,7 @@ function App() {
         categoriesNavRef={categoriesNavRef}
         settingsNavRef={settingsNavRef}
       />
-      <SongContext.Provider
-        value={{
-          setNewSong: songChosenCallback,
-          isSongChosen: currentSongID !== undefined && currentSongID > 0,
-        }}
-      >
+      <NavigationContext.Provider value={navigation}>
         <div id="main-wrapper" className="flex-center max-width">
           <div className="hidding-wrapper">
             <CategoriesNav
@@ -127,9 +75,9 @@ function App() {
             <ShareRepertoirePrompt />
             <ImportRepertoirePrompt />
           </div>
-          {MainBlock}
+          <Main />
         </div>
-      </SongContext.Provider>
+      </NavigationContext.Provider>
     </>
   );
 }
