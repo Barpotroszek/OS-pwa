@@ -11,7 +11,7 @@ export default class Filter {
      * @param query jaki tekst ma być wyszukany
      */
     public setSearchQuery(query: string) {
-        this.rgx = RegExp(this.query.replace(" ", ".*"))
+        this.rgx = new RegExp(query.replace(" ", ".*"), "i")
         this.query = query;
         // if(this.onFiltersChange != undefined)
         //     this.onFiltersChange();
