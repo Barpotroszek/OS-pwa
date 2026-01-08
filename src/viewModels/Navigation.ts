@@ -5,7 +5,13 @@ import CurrentSongVM from "./CurrentSongVM";
 import MyFileReader from "src/MyFileReader";
 import { callbackWithNumber } from "src/infrastructure/types/global";
 
+/**
+ * Główny kontroler aplikacji, odpowiadający za nawigacje między widokami
+ * i przekazywanie danych między głównymi obiektami
+ */
 export default class Navigation {
+    // Repo - źródło danych
+    // VM - obiekty przechowujące dane do wyświetlenia użytkownikowi
     private songListVM: SongListVM;
     private currentSongVM: CurrentSongVM;
     private songListRepo: SongList;
@@ -30,6 +36,7 @@ export default class Navigation {
         console.log("[Navigation]", this.currentSongVM)
     }
 
+    /** Ustawianie kategorii wyszukiwanych piosenek */
     setTag(tag: number) {
         URLManager.setSearchParam("tag", tag.toString());
         this.songListVM.setTag(tag);
@@ -40,13 +47,13 @@ export default class Navigation {
         // @ts-ignore
         // ! categoriesNavRef.current.classList.remove("active");
 
-
         // Na wypadek, jakby aktualnie była wyświetlana jakaś piosenka:
         this.exitSongView();
         if (this._onTagUpdate)
             this._onTagUpdate(tag);
     }
 
+    /** Ustawienie danej piosenki jako wybranej */
     setChosenSong(id: number) {
         URLManager.setSearchParam("id", String(id));
         console.log("[Navigation] Teraz ja:", this);
@@ -76,14 +83,17 @@ export default class Navigation {
         this.songListVM.fetchSongsFromRepo();
     }
 
+    /** Weryfikacja czy jakaś piosenka nie jest akutalnie wyświetlana */
     get isSongChosen() {
         return this.currentSongVM.isChosen
     }
 
+    /** Pobranie referencji do obiektu przechowującego listę piosenek */
     get songList() {
         return this.songListVM
     }
 
+    /** Pobranie referencji do obiektu przechowujacego dane wybranej piosenki */
     getCurrentSong() {
         return this.currentSongVM;
     }

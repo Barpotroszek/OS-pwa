@@ -1,10 +1,11 @@
 import Song from "../models/Song";
 import MyFileReader from "../MyFileReader";
 
+/** Obiekt przechowujące wszystkie dane potrzebne do wyświetlenia wybranej piosenki */
 export default class CurrentSong {
     public content: string = "";
-    private songRepo: Song | undefined;
-    private reader: MyFileReader;
+    private songRepo: Song | undefined;     // źródło danych
+    private reader: MyFileReader;           // narzędzie do odczytu danych
     private _onLoadEnd: ((text: string) => void) | undefined;
     private finished: boolean = true;
     private loadingProcess: Promise<string> | undefined
@@ -13,10 +14,11 @@ export default class CurrentSong {
         return this.songRepo === undefined;
     };
 
+    /** Callback wywoływany po załadowaniu danych  */
     public set onLoadEnd(v: (text: string) => void) {
         this._onLoadEnd = v;
+        // Jakby listener został ustawiony po przygotowaniu danych
         if (this.finished) {
-            // Jakby nie zdązył ustawić listenera, a skończył już prace
             v(this.content)
         }
     }
@@ -29,6 +31,10 @@ export default class CurrentSong {
         return this.songRepo?.toString() || "Coś poszło nie tak...";
     }
 
+    /**
+     * Ustawianie piosenki do wyświetlenia, odpowiada za przygotowanie danych, itp.
+     * @param song - nowa piosenka do ustawienia
+     */
     public setNewSong(song: Song | undefined) {
         this.finished = false;
         this.songRepo = song;

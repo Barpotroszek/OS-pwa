@@ -4,13 +4,14 @@ import SongList from "../models/SongList";
 import { LoadingStates } from "./LoadingStates"
 
 export default class SongListVM {
-    private currentList: Song[] = [];
-    private filter: Filter;
-    private repo: SongList;
-    private _uiState: LoadingStates = LoadingStates.NOT_READY
-    private _onLoadEnd: (() => void) = () => { };
+    private currentList: Song[] = [];   // aktualnie wyświetlana lista
+    private filter: Filter;             // aktualnie uzywany filtr
+    private repo: SongList;             // repozytorium, źródło danych
+    private _uiState: LoadingStates = LoadingStates.NOT_READY   // stan załodwania danych
+    private _onLoadEnd: (() => void) = () => { };   // callback wywoływany po stworzeniu listy
     // private _uiState = LoadingStates.NOT_READY
 
+    /** Ustawienie callbacku wywoływanego w momencie załadowania listy piosenek */
     public set onLoadEnd(callback: (() => void)) {
         this._onLoadEnd = callback;
         if (this._uiState === LoadingStates.FINISHED) {
@@ -21,6 +22,7 @@ export default class SongListVM {
     }
 
     public get uiState(): LoadingStates {
+        /** Stan przygotowania listy */
         return this._uiState
     }
     private set uiState(v: LoadingStates) {
@@ -44,11 +46,12 @@ export default class SongListVM {
         this.filter.setTag(value);
     }
 
-    /** Usuwanie tagów wyszukania, alias dla Filter.removeTag() */
+    /** Usuwanie konkretnego tagu wyszukania, alias dla Filter.removeTag() */
     public removeTag(value: number) {
         this.filter.removeTag(value)
     }
 
+    /** Usuwanie wyszstkich tagów filtru, aliad dla Filter.clearTags*/
     public clearTags() {
         this.filter.clearTags();
     }

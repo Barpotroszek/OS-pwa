@@ -5,29 +5,45 @@ import Song from "../models/Song";
 import navigationCtx from "src/contexts/NavigationContext";
 import { LoadingStates } from "src/viewModels/LoadingStates";
 
+/** Widok listy piosenek */
 export default function SongListView() {
+  /**
+   * Każda aktualizacja listy piosenek powoduje rerender całego elementu,
+   * stąd nie ma tu nigdzie jawnego wywołania
+   */
   const navigation = useContext(navigationCtx)!,
     songListVM = navigation.songList,
     [list, updateList] = useState(songListVM.getList());
 
+
   useEffect(() => {
+    // Przypisanie callbacku odpowiadającego za pobranie i aktualizację
+    // przygotowanej listy piosenek
     navigation.onListLoaded = () => {
       updateList(songListVM.getList())
     };
+
+    // Pierwsze pobranie przygotowanej listy piosenek
     songListVM.fetchSongsFromRepo();
   }, []);
 
+  /** Naciśnięcie "Submit", zatwierdzenie poszukiwanego tytułu/tekstu  */
   const searchButtonAction = (txt: string) => {
     songListVM.setSearchQuery(txt);
     songListVM.fetchSongsFromRepo();
   };
 
   let myBody: () => React.JSX.Element;
+  console.log("[SongListView] Rerendering list :>");
+
+  // Tekst tymczasowy
   if (songListVM.uiState !== LoadingStates.FINISHED)
     myBody = () => <i>Ładowanie pieśni...</i>;
+  
+  // Wyświetlanie przygotowanej listy
   else if (list.length > 0) myBody = () => <ItemsListFabric items={list} />;
+  // Gdy nie ma żadnych elementów
   else myBody = () => SthWentWrong();
-  console.log("[SongListView] Rerendering list :>");
 
   return (
     <>

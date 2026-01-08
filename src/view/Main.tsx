@@ -14,6 +14,7 @@ export function Main() {
     navigation.onCurrentSongUpdate = updateCurrentSong;
   }, []);
 
+  // Widok wybranek piosenki
   if (currentSongID !== undefined && currentSongID > 0) {
     return (
       <main id="songView">
@@ -23,6 +24,7 @@ export function Main() {
     );
   }
 
+  // Widok listy piosenek
   return (
     <main>
       <SongListView />
